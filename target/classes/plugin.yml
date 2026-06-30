@@ -1,0 +1,16 @@
+name: SimpleDupe
+version: 1.0
+main: com.skitmc.simpledupe.SimpleDupe
+api-version: 1.20
+author: Skitxoe
+commands:
+  dupe:
+    description: Duplicates the item in your hand.
+    permission: simpledupe.use
+    permission-message: You do not have permission to use this command.
+    usage: /dupe [amount]
+  simpledupereload:
+    description: Reloads the SimpleDupe configurations.
+    permission: simpledupe.admin
+    permission-message: You do not have permission to reload this plugin.
+    aliases: [dupereload]

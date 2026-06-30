@@ -1,0 +1,9 @@
+prefix: "&7[&bSimpleDupe&7] "
+
+only-players: "%prefix%&cOnly players can use this command!"
+no-item: "%prefix%&cYou must be holding an item to duplicate it!"
+blacklisted: "%prefix%&cYou cannot duplicate this item! It is blacklisted."
+invalid-number: "%prefix%&cPlease specify a valid number between 1 and %max%."
+exceeds-max: "%prefix%&cYou cannot duplicate more than %max% items at a time!"
+success: "%prefix%&aSuccessfully duplicated your item %amount% time(s)!"
+reload-success: "%prefix%&aConfiguration and messages reloaded successfully!"
