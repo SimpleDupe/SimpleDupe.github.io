@@ -13,6 +13,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.List;
 
 public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
@@ -25,20 +27,38 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
 
     @Override
     public void onEnable() {
-        // Save defaults if missing
-        saveDefaultConfig();
+        // 1. Create data folder if missing
+        if (!getDataFolder().exists()) {
+            getDataFolder().mkdirs();
+        }
+
+        // 2. Safe config.yml initialization
+        File configFile = new File(getDataFolder(), "config.yml");
+        if (!configFile.exists()) {
+            try (InputStream in = getResource("config.yml")) {
+                if (in != null) {
+                    Files.copy(in, configFile.toPath());
+                } else {
+                    saveDefaultConfig(); // Fallback
+                }
+            } catch (IOException e) {
+                getLogger().warning("Could not generate config.yml automatically.");
+            }
+        }
+        reloadConfig();
+
+        // 3. Safe messages.yml initialization
         createMessagesConfig();
         
-        // Load settings
+        // 4. Load memory variables
         loadPluginData();
 
-        // Register commands
-        this.getCommand("dupe").setExecutor(this);
-        this.getCommand("simpledupereload").setExecutor(this);
+        // 5. Register commands
+        if (this.getCommand("dupe") != null) this.getCommand("dupe").setExecutor(this);
+        if (this.getCommand("simpledupereload") != null) this.getCommand("simpledupereload").setExecutor(this);
     }
 
     private void loadPluginData() {
-        reloadConfig();
         this.blacklist = getConfig().getStringList("blacklist");
         this.maxDupeAmount = getConfig().getInt("max-dupe-amount", 5);
         
@@ -51,28 +71,35 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
     private void createMessagesConfig() {
         messagesFile = new File(getDataFolder(), "messages.yml");
         if (!messagesFile.exists()) {
-            messagesFile.getParentFile().mkdirs();
-            saveResource("messages.yml", false);
+            try (InputStream in = getResource("messages.yml")) {
+                if (in != null) {
+                    Files.copy(in, messagesFile.toPath());
+                } else {
+                    try { messagesFile.createNewFile(); } catch (IOException ignored) {}
+                }
+            } catch (IOException e) {
+                getLogger().warning("Could not generate messages.yml automatically.");
+            }
         }
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
     private String getMessage(String path) {
         String msg = messagesConfig.getString(path, "");
+        String prefix = messagesConfig.getString("prefix", "");
+        msg = msg.replace("%prefix%", prefix);
         return ChatColor.translateAlternateColorCodes('&', msg);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        
-        // Handle Reload Command
         if (command.getName().equalsIgnoreCase("simpledupereload")) {
+            reloadConfig();
             loadPluginData();
             sender.sendMessage(getMessage("reload-success"));
             return true;
         }
 
-        // Handle Dupe Command
         if (command.getName().equalsIgnoreCase("dupe")) {
             if (!(sender instanceof Player)) {
                 sender.sendMessage(getMessage("only-players"));
@@ -93,7 +120,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 return true;
             }
 
-            int amount = 1; // Default fallback amount
+            int amount = 1;
 
             if (args.length > 0) {
                 try {
@@ -113,7 +140,6 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 }
             }
 
-            // Loop and distribute the items safely based on the calculated amount
             for (int i = 0; i < amount; i++) {
                 ItemStack duplicatedItem = itemInHand.clone();
                 player.getInventory().addItem(duplicatedItem).values().forEach(remainingItem -> 
@@ -124,7 +150,6 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
             player.sendMessage(getMessage("success").replace("%amount%", String.valueOf(amount)));
             return true;
         }
-
         return false;
     }
 }
