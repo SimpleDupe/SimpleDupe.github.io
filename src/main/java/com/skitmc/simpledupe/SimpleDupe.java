@@ -1,108 +1,57 @@
 package com.skitmc.simpledupe;
 
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.util.List;
-
 public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
 
-    private List<String> blacklist;
-    private int maxDupeAmount;
-    
-    private File messagesFile;
-    private FileConfiguration messagesConfig;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
-        // 1. Create data folder if missing
-        if (!getDataFolder().exists()) {
-            getDataFolder().mkdirs();
-        }
+        this.configManager = new ConfigManager(this);
+        this.configManager.setupFiles();
 
-        // 2. Safe config.yml initialization
-        File configFile = new File(getDataFolder(), "config.yml");
-        if (!configFile.exists()) {
-            try (InputStream in = getResource("config.yml")) {
-                if (in != null) {
-                    Files.copy(in, configFile.toPath());
-                } else {
-                    saveDefaultConfig(); // Fallback
-                }
-            } catch (IOException e) {
-                getLogger().warning("Could not generate config.yml automatically.");
-            }
-        }
-        reloadConfig();
-
-        // 3. Safe messages.yml initialization
-        createMessagesConfig();
-        
-        // 4. Load memory variables
-        loadPluginData();
-
-        // 5. Register commands
         if (this.getCommand("dupe") != null) this.getCommand("dupe").setExecutor(this);
         if (this.getCommand("simpledupereload") != null) this.getCommand("simpledupereload").setExecutor(this);
+
+        broadcastCredits();
     }
 
-    private void loadPluginData() {
-        this.blacklist = getConfig().getStringList("blacklist");
-        this.maxDupeAmount = getConfig().getInt("max-dupe-amount", 5);
-        
-        if (messagesFile == null) {
-            messagesFile = new File(getDataFolder(), "messages.yml");
-        }
-        this.messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
-    }
+    private void broadcastCredits() {
+        Component lines = Component.text("\n")
+            .append(Component.text("Using SimpleDupe Created by ", NamedTextColor.GRAY))
+            .append(Component.text("SkitMC ", NamedTextColor.AQUA, TextDecoration.BOLD))
+            .append(Component.text("Known as ", NamedTextColor.GRAY))
+            .append(Component.text("Skitxoe", NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD))
+            .append(Component.text("!\n", NamedTextColor.GRAY))
+            .append(Component.text("Click here to view GitHub project profile", NamedTextColor.YELLOW, TextDecoration.UNDERLINED)
+                .clickEvent(ClickEvent.openUrl("https://github.com/skitmc/")))
+            .append(Component.text("\n"));
 
-    private void createMessagesConfig() {
-        messagesFile = new File(getDataFolder(), "messages.yml");
-        if (!messagesFile.exists()) {
-            try (InputStream in = getResource("messages.yml")) {
-                if (in != null) {
-                    Files.copy(in, messagesFile.toPath());
-                } else {
-                    try { messagesFile.createNewFile(); } catch (IOException ignored) {}
-                }
-            } catch (IOException e) {
-                getLogger().warning("Could not generate messages.yml automatically.");
-            }
-        }
-        messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
-    }
-
-    private String getMessage(String path) {
-        String msg = messagesConfig.getString(path, "");
-        String prefix = messagesConfig.getString("prefix", "");
-        msg = msg.replace("%prefix%", prefix);
-        return ChatColor.translateAlternateColorCodes('&', msg);
+        getServer().broadcast(lines);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("simpledupereload")) {
-            reloadConfig();
-            loadPluginData();
-            sender.sendMessage(getMessage("reload-success"));
+            configManager.setupFiles();
+            sender.sendMessage(configManager.getMessage("reload-success"));
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("dupe")) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(getMessage("only-players"));
+                sender.sendMessage(configManager.getMessage("only-players"));
                 return true;
             }
 
@@ -110,32 +59,32 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
             ItemStack itemInHand = player.getInventory().getItemInMainHand();
 
             if (itemInHand == null || itemInHand.getType() == Material.AIR) {
-                player.sendMessage(getMessage("no-item"));
+                player.sendMessage(configManager.getMessage("no-item"));
                 return true;
             }
 
-            String itemType = itemInHand.getType().name();
-            if (blacklist.contains(itemType)) {
-                player.sendMessage(getMessage("blacklisted"));
+            if (configManager.getBlacklist().contains(itemInHand.getType().name())) {
+                player.sendMessage(configManager.getMessage("blacklisted"));
                 return true;
             }
 
             int amount = 1;
+            int maxLimit = configManager.getMaxDupe();
 
             if (args.length > 0) {
                 try {
                     amount = Integer.parseInt(args[0]);
                     if (amount <= 0) {
-                        player.sendMessage(getMessage("invalid-number").replace("%max%", String.valueOf(maxDupeAmount)));
+                        player.sendMessage(configManager.getMessage("invalid-number").replace("%max%", String.valueOf(maxLimit)));
                         return true;
                     }
                 } catch (NumberFormatException e) {
-                    player.sendMessage(getMessage("invalid-number").replace("%max%", String.valueOf(maxDupeAmount)));
+                    player.sendMessage(configManager.getMessage("invalid-number").replace("%max%", String.valueOf(maxLimit)));
                     return true;
                 }
 
-                if (amount > maxDupeAmount) {
-                    player.sendMessage(getMessage("exceeds-max").replace("%max%", String.valueOf(maxDupeAmount)));
+                if (amount > maxLimit) {
+                    player.sendMessage(configManager.getMessage("exceeds-max").replace("%max%", String.valueOf(maxLimit)));
                     return true;
                 }
             }
@@ -147,7 +96,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 );
             }
 
-            player.sendMessage(getMessage("success").replace("%amount%", String.valueOf(amount)));
+            player.sendMessage(configManager.getMessage("success").replace("%amount%", String.valueOf(amount)));
             return true;
         }
         return false;
