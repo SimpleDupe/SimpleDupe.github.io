@@ -1,24 +1,44 @@
-# SimpleDupe 💎
+<p align="center">
+  <img src="assets/simpledupe-logo.png" alt="SimpleDupe" width="480">
+</p>
 
-A lightweight, high-performance, and fully customizable duplication plugin for Bukkit/Spigot/Paper Minecraft servers. Created by **SkitMC**.
+<p align="center">
+  <a href="https://github.com/skitmc/SimpleDupe/releases/latest">
+    <img src="https://img.shields.io/badge/Download-Latest%20Release-00bfc7?style=for-the-badge&logo=github&logoColor=white" alt="Download the latest release">
+  </a>
+</p>
 
----
+Paper plugin for duplicating the item in your main hand, with configurable limits and blacklists.
 
-## 🚀 Features
+## Install
 
-* **Customizable Limits:** Set a maximum duplication cap via config (e.g., limit users to multiplying 1–5 items at a time).
-* **Robust Blacklist:** Restrict specific material types (like Bedrock, Barriers, or Shulker Boxes) from being duplicated.
-* **Preserves Data (NBT):** Uses safe item cloning, ensuring custom names, complex lore, enchantments, and container contents (like Shulker items) are retained perfectly.
-* **Smart Drop System:** If a player's inventory fills up during duplication, excess items are dropped safely at their feet instead of vanishing.
-* **Full Translation & Prefix Support:** Every message and structural prefix is completely customizable with formatting/color codes via `messages.yml`.
+Download the [latest release](https://github.com/skitmc/SimpleDupe/releases/latest) and place the JAR in your server's `plugins` folder.
 
----
+## Commands
 
-## 🛠️ Commands & Permissions
+| Command | Permission |
+| --- | --- |
+| `/dupe [amount]` | `simpledupe.use` |
+| `/simpledupereload` | `simpledupe.admin` |
 
-| Command | Description | Default Permission |
-| :--- | :--- | :--- |
-| `/dupe [amount]` | Duplicates the item currently held in your main hand. | `simpledupe.use` |
-| `/simpledupereload` | Reloads all configurations and localizations instantly. | `simpledupe.admin` |
+`/dupereload` is an alias for `/simpledupereload`.
 
-* **Alias:** `/dupereload` can be used interchangeably with `/simpledupereload`.
+## Blacklist
+
+Edit `plugins/SimpleDupe/config.yml`:
+
+```yaml
+max-dupe-amount: 5
+
+blacklist:
+  materials: [BEDROCK, BARRIER, COMMAND_BLOCK]
+  names: []
+  enchantments:
+    - "SHARPNESS:6"
+  lore:
+    - "&ctest"
+```
+
+`KEY:LEVEL` blocks that enchantment at the specified level and above. Names and lore match complete values; `&` color codes are supported.
+
+Requires Paper 1.21.1 and Java 21.

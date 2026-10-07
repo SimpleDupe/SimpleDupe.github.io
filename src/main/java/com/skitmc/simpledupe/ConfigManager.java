@@ -1,12 +1,17 @@
 package com.skitmc.simpledupe;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.ChatColor;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 public class ConfigManager {
 
@@ -40,30 +45,103 @@ public class ConfigManager {
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
     }
 
-    public List<String> getBlacklist() {
-        List<String> list = plugin.getConfig().getStringList("blacklist");
-        if (list.isEmpty()) {
-            list = new ArrayList<>();
-            list.add("BEDROCK");
-            list.add("BARRIER");
-            list.add("COMMAND_BLOCK");
+    public boolean isBlacklisted(ItemStack item) {
+        FileConfiguration config = plugin.getConfig();
+        List<String> materials = config.getStringList("blacklist.materials");
+
+        // Older versions stored the material list directly under "blacklist".
+        if (config.isList("blacklist")) {
+            materials = config.getStringList("blacklist");
         }
-        return list;
+
+        if (materials.stream().anyMatch(material -> material.trim().equalsIgnoreCase(item.getType().name()))) {
+            return true;
+        }
+
+        ItemMeta meta = item.getItemMeta();
+        if (meta == null) {
+            return false;
+        }
+
+        if (meta.hasDisplayName() && matchesText(config.getStringList("blacklist.names"), meta.getDisplayName())) {
+            return true;
+        }
+
+        if (meta.hasLore() && meta.getLore().stream()
+                .anyMatch(line -> matchesText(config.getStringList("blacklist.lore"), line))) {
+            return true;
+        }
+
+        return meta.getEnchants().entrySet().stream().anyMatch(entry ->
+                config.getStringList("blacklist.enchantments").stream().anyMatch(value ->
+                        matchesEnchantment(value, entry.getKey(), entry.getValue())));
+    }
+
+    private boolean matchesEnchantment(String rule, Enchantment enchantment, int level) {
+        String enchantmentName = rule.trim();
+        int minimumLevel = 1;
+        int separator = enchantmentName.lastIndexOf(':');
+
+        if (separator >= 0) {
+            try {
+                minimumLevel = Integer.parseInt(enchantmentName.substring(separator + 1).trim());
+                enchantmentName = enchantmentName.substring(0, separator).trim();
+            } catch (NumberFormatException ignored) {
+                // A namespace separator is not a level unless its suffix is numeric.
+            }
+        }
+
+        return minimumLevel > 0
+                && level >= minimumLevel
+                && normalizeEnchantment(enchantmentName).equals(normalizeEnchantment(enchantment.getKey().toString()));
+    }
+
+    private boolean matchesText(List<String> blockedValues, String itemValue) {
+        String normalizedItemValue = normalizeText(itemValue);
+        return blockedValues.stream().anyMatch(value -> normalizeText(value).equals(normalizedItemValue));
+    }
+
+    private String normalizeText(String value) {
+        return ChatColor.translateAlternateColorCodes('&', value).toLowerCase(Locale.ROOT);
+    }
+
+    private String normalizeEnchantment(String value) {
+        String normalized = value.trim().toLowerCase(Locale.ROOT);
+        if (normalized.startsWith("minecraft:")) {
+            return normalized.substring("minecraft:".length());
+        }
+        return normalized;
     }
 
     public int getMaxDupe() {
-        return plugin.getConfig().getInt("max-dupe-amount", 5);
+        return Math.max(1, plugin.getConfig().getInt("max-dupe-amount", 5));
     }
 
-    public String getMessage(String path) {
+    /**
+     * Gets the raw String from messages.yml with %prefix% replaced.
+     */
+    public String getRawMessage(String path) {
         String msg = messagesConfig.getString(path, "");
-        String prefix = messagesConfig.getString("prefix", "&7[&bSimpleDupe&7] ");
-        
+        String prefix = messagesConfig.getString("prefix", "&8[&bSimpleDupe&8] ");
+
         if (msg.isEmpty()) {
-            return ChatColor.RED + "Missing configuration string entry: " + path;
+            return "&cMissing configuration string entry: " + path;
         }
-        
-        msg = msg.replace("%prefix%", prefix);
-        return ChatColor.translateAlternateColorCodes('&', msg);
+
+        return msg.replace("%prefix%", prefix);
+    }
+
+    /**
+     * Gets a Legacy formatted String with color codes translated ('&' -> '§').
+     */
+    public String getMessageString(String path) {
+        return ChatColor.translateAlternateColorCodes('&', getRawMessage(path));
+    }
+
+    /**
+     * Gets an Adventure Component for direct player messaging with color codes applied.
+     */
+    public Component getMessage(String path) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(getRawMessage(path));
     }
 }

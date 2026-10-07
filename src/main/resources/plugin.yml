@@ -3,14 +3,19 @@ version: 1.0
 main: com.skitmc.simpledupe.SimpleDupe
 api-version: 1.20
 author: Skitxoe
+description: A lightweight, customizable item duplication plugin.
+
 commands:
   dupe:
-    description: Duplicates the item in your hand.
-    permission: simpledupe.use
-    permission-message: You do not have permission to use this command.
-    usage: /dupe [amount]
+    description: Duplicates the item in your main hand.
   simpledupereload:
-    description: Reloads the SimpleDupe configurations.
-    permission: simpledupe.admin
-    permission-message: You do not have permission to reload this plugin.
+    description: Reloads the SimpleDupe configurations and messages.
     aliases: [dupereload]
+
+permissions:
+  simpledupe.use:
+    description: Allows players to duplicate items using /dupe.
+    default: true
+  simpledupe.admin:
+    description: Allows admins to reload the plugin configuration using /simpledupereload.
+    default: op

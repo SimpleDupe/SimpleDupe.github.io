@@ -1,18 +1,28 @@
-# ==========================================================
-#                   SimpleDupe Messages
-#                 Creator: Skitxoe (SkitMC)
-# ==========================================================
+# SimpleDupe messages
 
-# The prefix that will automatically appear before every message below
-prefix: "&7[&bSimpleDupe&7] "
+# Global prefix used in plugin messages.
+prefix: "&8[&bSimpleDupe&8] "
 
-# Error messages
-only-players: "%prefix%&cOnly players can use this command!"
-no-item: "%prefix%&cYou must be holding an item to duplicate it!"
-blacklisted: "%prefix%&cYou cannot duplicate this item! It is blacklisted."
-invalid-number: "%prefix%&cPlease specify a valid number between 1 and %max%."
-exceeds-max: "%prefix%&cYou cannot duplicate more than %max% items at a time!"
+# General command feedback
+no-permission: "%prefix%&cYou do not have permission to do that."
+only-players: "%prefix%&cThis command can only be used by players in-game."
 
-# Success messages
-success: "%prefix%&aSuccessfully duplicated your item %amount% time(s)!"
-reload-success: "%prefix%&aConfiguration and messages reloaded successfully!"
+# Duplicate command messages
+no-item: "%prefix%&cHold an item in your main hand to duplicate it."
+blacklisted: "%prefix%&cThat item is blacklisted and cannot be duplicated."
+invalid-number: "%prefix%&cEnter a valid number from &f1 &cto &f%max%&c."
+exceeds-max: "%prefix%&cYou cannot duplicate more than &f%max% &citems at once."
+success: "%prefix%&aDuplicated &f%amount%x &aitem(s) successfully!"
+reload-success: "%prefix%&aConfiguration reloaded successfully."
+
+# Update notification for admins/ops
+update-line-1: "&8&m----------------------------------------"
+update-line-2: " &b&l[SimpleDupe] &aA new update is available! &e(v%version%)"
+update-line-3: " &e&nClick here to download the latest version"
+update-line-4: "&8&m----------------------------------------"
+
+# Credit banner shown on plugin startup
+credit-line-1: "&8&m----------------------------------------"
+credit-line-2: " &b&lSimpleDupe &7| Created by &b&lSkitMC &7(&d&lSkitxoe&7)"
+credit-line-3: " &e&nClick here to visit the GitHub repository"
+credit-line-4: "&8&m----------------------------------------"

@@ -1,13 +1,9 @@
-# ==========================================================
-#                   SimpleDupe Configuration
-#                 Creator: Skitxoe (SkitMC)
-# ==========================================================
+# SimpleDupe configuration
 
-# Maximum amount a player can duplicate at once (e.g., /dupe 5)
+# Maximum number of items a player can duplicate at once.
 max-dupe-amount: 5
 
-# Material names must match official Bukkit enum values.
-# Items listed here cannot be duplicated by players.
+# Materials that cannot be duplicated.
 blacklist:
   - BEDROCK
   - BARRIER

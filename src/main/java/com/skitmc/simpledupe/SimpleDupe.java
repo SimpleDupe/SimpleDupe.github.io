@@ -1,20 +1,34 @@
 package com.skitmc.simpledupe;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.time.Duration;
+
+public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Listener {
 
     private ConfigManager configManager;
+
+    private volatile boolean updateAvailable = false;
+    private volatile String latestVersion = "";
+    private volatile String downloadUrl = "";
 
     @Override
     public void onEnable() {
@@ -24,32 +38,125 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
         if (this.getCommand("dupe") != null) this.getCommand("dupe").setExecutor(this);
         if (this.getCommand("simpledupereload") != null) this.getCommand("simpledupereload").setExecutor(this);
 
+        getServer().getPluginManager().registerEvents(this, this);
+
+        getServer().getScheduler().runTaskAsynchronously(this, this::checkForUpdates);
+
         broadcastCredits();
     }
 
-    private void broadcastCredits() {
-        Component lines = Component.text("\n")
-            .append(Component.text("Using SimpleDupe Created by ", NamedTextColor.GRAY))
-            .append(Component.text("SkitMC ", NamedTextColor.AQUA, TextDecoration.BOLD))
-            .append(Component.text("Known as ", NamedTextColor.GRAY))
-            .append(Component.text("Skitxoe", NamedTextColor.LIGHT_PURPLE, TextDecoration.BOLD))
-            .append(Component.text("!\n", NamedTextColor.GRAY))
-            .append(Component.text("Click here to view GitHub project profile", NamedTextColor.YELLOW, TextDecoration.UNDERLINED)
-                .clickEvent(ClickEvent.openUrl("https://github.com/skitmc/")))
-            .append(Component.text("\n"));
+    private void checkForUpdates() {
+        try {
+            HttpClient client = HttpClient.newBuilder()
+                    .connectTimeout(Duration.ofSeconds(10))
+                    .build();
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create("https://api.github.com/repos/skitmc/SimpleDupe/releases/latest"))
+                    .header("User-Agent", "SimpleDupe-UpdateChecker")
+                    .timeout(Duration.ofSeconds(15))
+                    .GET()
+                    .build();
 
-        getServer().broadcast(lines);
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+            if (response.statusCode() != 200) {
+                getLogger().warning("GitHub update check returned HTTP " + response.statusCode() + ".");
+                return;
+            }
+
+            JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
+            if (!json.has("tag_name") || !json.has("html_url")) {
+                getLogger().warning("GitHub returned a release without the expected version or URL.");
+                return;
+            }
+
+            latestVersion = json.get("tag_name").getAsString().replaceFirst("(?i)^v", "");
+            String currentVersion = getPluginMeta().getVersion().replaceFirst("(?i)^v", "");
+            updateAvailable = !currentVersion.equalsIgnoreCase(latestVersion);
+            downloadUrl = json.get("html_url").getAsString();
+
+            if (updateAvailable) {
+                getLogger().info("A new update (v" + latestVersion + ") is available on GitHub!");
+                getServer().getScheduler().runTask(this, () -> getServer().getOnlinePlayers().stream()
+                        .filter(Player::isOp)
+                        .forEach(this::sendUpdateNotification));
+            }
+        } catch (Exception e) {
+            getLogger().warning("Unable to check for updates: " + e.getMessage());
+        }
+    }
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+
+        if (player.isOp() && updateAvailable) {
+            sendUpdateNotification(player);
+        }
+    }
+
+    private void sendUpdateNotification(Player player) {
+        Component line1 = deserialize(configManager.getRawMessage("update-line-1"));
+        Component line2 = deserialize(configManager.getRawMessage("update-line-2").replace("%version%", latestVersion));
+        Component line3 = deserialize(configManager.getRawMessage("update-line-3"))
+                .clickEvent(ClickEvent.openUrl(downloadUrl));
+        Component line4 = deserialize(configManager.getRawMessage("update-line-4"));
+
+        Component updateMessage = Component.empty()
+                .append(Component.newline())
+                .append(line1).append(Component.newline())
+                .append(line2).append(Component.newline())
+                .append(line3).append(Component.newline())
+                .append(line4).append(Component.newline());
+
+        player.sendMessage(updateMessage);
+    }
+
+    private void broadcastCredits() {
+        Component line1 = deserialize(configManager.getRawMessage("credit-line-1"));
+        Component line2 = deserialize(configManager.getRawMessage("credit-line-2"));
+        Component line3 = deserialize(configManager.getRawMessage("credit-line-3"))
+                .clickEvent(ClickEvent.openUrl("https://github.com/skitmc/SimpleDupe"));
+        Component line4 = deserialize(configManager.getRawMessage("credit-line-4"));
+
+        Component creditBanner = Component.empty()
+                .append(Component.newline())
+                .append(line1).append(Component.newline())
+                .append(line2).append(Component.newline())
+                .append(line3).append(Component.newline())
+                .append(line4).append(Component.newline());
+
+        getServer().broadcast(creditBanner);
+    }
+
+    private Component deserialize(String text) {
+        return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
     }
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("simpledupereload")) {
+            if (!sender.hasPermission("simpledupe.admin")) {
+                sender.sendMessage(configManager.getMessage("no-permission"));
+                return true;
+            }
+
             configManager.setupFiles();
             sender.sendMessage(configManager.getMessage("reload-success"));
             return true;
         }
 
         if (command.getName().equalsIgnoreCase("dupe")) {
+            if (!sender.hasPermission("simpledupe.use")) {
+                sender.sendMessage(configManager.getMessage("no-permission"));
+                return true;
+            }
+
+            if (args.length > 1) {
+                sender.sendMessage(configManager.getMessage("invalid-usage"));
+                return true;
+            }
+
             if (!(sender instanceof Player)) {
                 sender.sendMessage(configManager.getMessage("only-players"));
                 return true;
@@ -63,7 +170,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 return true;
             }
 
-            if (configManager.getBlacklist().contains(itemInHand.getType().name())) {
+            if (configManager.isBlacklisted(itemInHand)) {
                 player.sendMessage(configManager.getMessage("blacklisted"));
                 return true;
             }
@@ -75,18 +182,22 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 try {
                     amount = Integer.parseInt(args[0]);
                     if (amount <= 0) {
-                        player.sendMessage(configManager.getMessage("invalid-number").replace("%max%", String.valueOf(maxLimit)));
+                        String rawMsg = configManager.getRawMessage("invalid-number").replace("%max%", String.valueOf(maxLimit));
+                        player.sendMessage(deserialize(rawMsg));
                         return true;
                     }
                 } catch (NumberFormatException e) {
-                    player.sendMessage(configManager.getMessage("invalid-number").replace("%max%", String.valueOf(maxLimit)));
+                    String rawMsg = configManager.getRawMessage("invalid-number").replace("%max%", String.valueOf(maxLimit));
+                    player.sendMessage(deserialize(rawMsg));
                     return true;
                 }
 
-                if (amount > maxLimit) {
-                    player.sendMessage(configManager.getMessage("exceeds-max").replace("%max%", String.valueOf(maxLimit)));
-                    return true;
-                }
+            }
+
+            if (amount > maxLimit) {
+                String rawMsg = configManager.getRawMessage("exceeds-max").replace("%max%", String.valueOf(maxLimit));
+                player.sendMessage(deserialize(rawMsg));
+                return true;
             }
 
             for (int i = 0; i < amount; i++) {
@@ -96,7 +207,8 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor {
                 );
             }
 
-            player.sendMessage(configManager.getMessage("success").replace("%amount%", String.valueOf(amount)));
+            String rawMsg = configManager.getRawMessage("success").replace("%amount%", String.valueOf(amount));
+            player.sendMessage(deserialize(rawMsg));
             return true;
         }
         return false;
