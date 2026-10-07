@@ -8,13 +8,8 @@ description: A lightweight, customizable item duplication plugin.
 commands:
   dupe:
     description: Duplicates the item in your main hand.
-    permission: simpledupe.use
-    permission-message: You do not have permission to use this command.
-    usage: /dupe [amount]
   simpledupereload:
     description: Reloads the SimpleDupe configurations and messages.
-    permission: simpledupe.admin
-    permission-message: You do not have permission to reload this plugin.
     aliases: [dupereload]
 
 permissions:

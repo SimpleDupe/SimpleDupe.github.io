@@ -6,6 +6,7 @@ prefix: "&8[&bSimpleDupe&8] "
 # General command feedback
 no-permission: "%prefix%&cYou do not have permission to do that."
 only-players: "%prefix%&cThis command can only be used by players in-game."
+invalid-usage: "%prefix%&cUsage: &f/dupe [amount]"
 
 # Duplicate command messages
 no-item: "%prefix%&cHold an item in your main hand to duplicate it."
