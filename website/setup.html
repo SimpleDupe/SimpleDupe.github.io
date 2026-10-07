@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081315">
+  <meta name="description" content="Install SimpleDupe, learn its commands, and configure limits and item blacklists.">
+  <title>Setup | SimpleDupe</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="SimpleDupe home"><img class="brand-icon" src="favicon.svg" alt=""><span>SimpleDupe</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="download.html">Downloads</a>
+        <a href="setup.html" aria-current="page">Setup</a>
+        <a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-intro container">
+      <p class="section-kicker">Installation and configuration</p>
+      <h1>Set up your server.</h1>
+      <p>Get SimpleDupe running, choose who can use it, and customize what can be duplicated.</p>
+    </section>
+
+    <section class="content-section container">
+      <p class="section-kicker">Install</p>
+      <h2>Three quick steps</h2>
+      <table class="data-table">
+        <tbody>
+          <tr><th scope="row">1. Download</th><td>Get the latest JAR from the <a class="inline-link" href="download.html">downloads page</a>.</td></tr>
+          <tr><th scope="row">2. Add to server</th><td>Place the JAR in your server's <code>plugins</code> folder and start Paper.</td></tr>
+          <tr><th scope="row">3. Configure</th><td>Edit <code>plugins/SimpleDupe/config.yml</code> and <code>messages.yml</code>. Reload with <code>/simpledupereload</code>.</td></tr>
+        </tbody>
+      </table>
+      <p class="content-copy">Requires Paper 1.21.1 and Java 21.</p>
+    </section>
+
+    <section class="content-section container">
+      <p class="section-kicker">Commands and permissions</p>
+      <h2>Use it in game</h2>
+      <table class="data-table">
+        <thead><tr><th scope="col">Command</th><th scope="col">Permission</th><th scope="col">Description</th></tr></thead>
+        <tbody>
+          <tr><th scope="row"><code>/dupe [amount]</code></th><td><code>simpledupe.use</code></td><td>Duplicate the item held in your main hand.</td></tr>
+          <tr><th scope="row"><code>/simpledupereload</code></th><td><code>simpledupe.admin</code></td><td>Reload the plugin config and messages. Alias: <code>/dupereload</code>.</td></tr>
+        </tbody>
+      </table>
+      <p class="content-copy">The use permission is granted to everyone by default. Reload permission is for operators by default.</p>
+    </section>
+
+    <section class="content-section container">
+      <p class="section-kicker">Blacklist example</p>
+      <h2>Choose what cannot be copied</h2>
+      <div class="content-copy"><p>Use material names, exact custom names, enchantment keys, or lore lines. Add <code>:LEVEL</code> to an enchantment to block that level and higher. Ampersand color codes are supported in names and lore.</p></div>
+      <pre><code># SimpleDupe configuration
+# Maximum number of items a player can duplicate at once.
+max-dupe-amount: 5
+
+# Items matching any entry below cannot be duplicated.
+blacklist:
+  materials:
+    - BEDROCK
+    - BARRIER
+    - COMMAND_BLOCK
+    - STRUCTURE_BLOCK
+    - JIGSAW
+  names: []
+  # Use an enchantment key, or KEY:LEVEL to block that level and higher.
+  enchantments:
+    - "SHARPNESS:6"
+  lore:
+    - "&amp;ctest"</code></pre>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container"><span>SimpleDupe <span data-release-version>Latest release</span></span><a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">Source code on GitHub</a></div>
+  </footer>
+  <script src="site.js" defer></script>
+</body>
+</html>

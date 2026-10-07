@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081315">
+  <meta name="description" content="Explore SimpleDupe's configurable limits, item blacklists, data preservation, and overflow handling.">
+  <title>Features | SimpleDupe</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="SimpleDupe home"><img class="brand-icon" src="favicon.svg" alt=""><span>SimpleDupe</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html" aria-current="page">Features</a>
+        <a href="download.html">Downloads</a>
+        <a href="setup.html">Setup</a>
+        <a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-intro container">
+      <p class="section-kicker">SimpleDupe features</p>
+      <h1>Control the details.</h1>
+      <p>Keep item duplication straightforward while setting the rules that make sense for your server.</p>
+    </section>
+
+    <section class="content-section container">
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-index">01 / LIMITS</span>
+          <h3>Choose the copy limit</h3>
+          <p>Set <code>max-dupe-amount</code> in the config and let players duplicate one item or a chosen amount up to that limit.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">02 / MATERIALS</span>
+          <h3>Block item types</h3>
+          <p>Keep materials such as Bedrock, Barriers, or Command Blocks off the duplication list.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">03 / ITEM DETAILS</span>
+          <h3>Match names and lore</h3>
+          <p>Block items by exact custom name or lore line, including legacy color codes such as <code>&amp;ctest</code>.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section container">
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-index">04 / ENCHANTMENTS</span>
+          <h3>Set enchantment thresholds</h3>
+          <p>Block an enchantment at every level, or use a threshold such as <code>SHARPNESS:6</code> to block level 6 and above.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">05 / ITEM DATA</span>
+          <h3>Preserve the item</h3>
+          <p>SimpleDupe clones the held stack, preserving its name, lore, enchantments, and item data.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">06 / INVENTORY</span>
+          <h3>Handle full inventories</h3>
+          <p>Items that do not fit in the inventory are dropped naturally at the player's location.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section container">
+      <p class="section-kicker">Configuration</p>
+      <h2>Rules live in config.yml</h2>
+      <div class="content-copy">
+        <p>Use separate lists for each kind of blacklist rule. Names and lore support ampersand color codes; enchantment levels are inclusive thresholds.</p>
+      </div>
+      <pre><code>blacklist:
+  materials:
+    - BEDROCK
+  names: []
+  enchantments:
+    - "SHARPNESS:6"
+  lore:
+    - "&amp;ctest"</code></pre>
+      <a class="inline-link" href="setup.html">See setup and command details</a>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container"><span>SimpleDupe <span data-release-version>Latest release</span></span><a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">Source code on GitHub</a></div>
+  </footer>
+  <script src="site.js" defer></script>
+</body>
+</html>
