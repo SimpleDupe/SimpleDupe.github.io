@@ -1,4 +1,3 @@
-```markdown
 # SimpleDupe 💎
 
 A lightweight, high-performance, and fully customizable duplication plugin for Bukkit/Spigot/Paper Minecraft servers. Created by **SkitMC**.
