@@ -187,6 +187,30 @@ h2 { margin-bottom: 20px; font-size: 27px; font-weight: 500; line-height: 1.2; }
 .metric + .metric { padding-left: 24px; border-left: 1px solid var(--rule); }
 .metric-label { display: block; margin-bottom: 5px; color: var(--faint); font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
 .metric-value { display: block; color: var(--ink); font: 500 16px/1.3 var(--display); }
+.release-bar { padding-top: 20px; }
+.hub-section { padding-block: 39px 60px; }
+.hub-heading { display: flex; align-items: end; justify-content: space-between; gap: 20px; margin-bottom: 20px; }
+.hub-heading h2 { margin: 0; font-size: 24px; }
+.hub-heading .inline-link { flex: 0 0 auto; margin: 0 0 2px; }
+.hub-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.hub-link {
+  min-height: 125px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px;
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  background: rgba(13, 28, 31, .56);
+  text-decoration: none;
+  transition: border-color .18s ease, background .18s ease, transform .18s ease;
+}
+.hub-link:hover, .hub-link:focus-visible { transform: translateY(-2px); border-color: var(--cyan); background: var(--surface); }
+.hub-index { display: block; margin-bottom: 8px; color: var(--cyan); font: 500 10px/1 var(--display); }
+.hub-link strong { display: block; margin-bottom: 3px; font: 500 16px/1.3 var(--display); }
+.hub-link small { display: block; color: var(--muted); font-size: 11px; line-height: 1.4; }
+.hub-arrow { flex: 0 0 auto; color: var(--cyan); font-size: 20px; }
 
 .page-intro { padding-block: 56px 32px; border-bottom: 1px solid var(--rule); }
 .page-intro h1 { margin-bottom: 12px; font-size: 42px; }
@@ -255,6 +279,10 @@ pre {
   .metric + .metric { border-top: 1px solid var(--rule); }
   .metric-label { margin: 0; }
   .metric-value { text-align: right; }
+  .hub-section { padding-block: 30px 42px; }
+  .hub-heading { align-items: flex-start; flex-direction: column; gap: 9px; }
+  .hub-grid { grid-template-columns: 1fr; }
+  .hub-link { min-height: 86px; padding: 14px 16px; }
   .page-intro { padding-block: 42px 25px; }
   .page-intro h1 { font-size: 36px; }
   .download-layout { grid-template-columns: 1fr; gap: 25px; }
