@@ -28,17 +28,25 @@ Download the [latest release](https://github.com/skitmc/SimpleDupe/releases/late
 Edit `plugins/SimpleDupe/config.yml`:
 
 ```yaml
+# SimpleDupe configuration
+#
+# Maximum number of items a player can duplicate at once.
 max-dupe-amount: 5
 
+# Items matching any entry below cannot be duplicated.
 blacklist:
-  materials: [BEDROCK, BARRIER, COMMAND_BLOCK]
+  materials:
+    - BEDROCK
+    - BARRIER
+    - COMMAND_BLOCK
+    - STRUCTURE_BLOCK
+    - JIGSAW
   names: []
-  enchantments:
-    - "SHARPNESS:6"
-  lore:
-    - "&ctest"
+  # Use an enchantment key, or KEY:LEVEL to block that level and higher.
+  enchantments: []
+  lore: []
 ```
 
-`KEY:LEVEL` blocks that enchantment at the specified level and above. Names and lore match complete values; `&` color codes are supported.
+Add material names, custom names, enchantments, or lore entries to their respective lists. `KEY:LEVEL` blocks an enchantment at the specified level and above; `&` color codes are supported in names and lore.
 
 Requires Paper 1.21.1 and Java 21.
