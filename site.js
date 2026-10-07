@@ -132,4 +132,15 @@ async function loadLatestRelease() {
   }
 }
 
-loadLatestRelease();
+const legacyPage = {
+  "#features": "features.html",
+  "#download": "download.html",
+  "#setup": "setup.html",
+  "#release-notes": "download.html"
+}[window.location.hash];
+
+if (legacyPage && (window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/index.html"))) {
+  window.location.replace(legacyPage);
+} else {
+  loadLatestRelease();
+}
