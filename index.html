@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081315">
+  <meta name="description" content="SimpleDupe is a configurable Paper plugin for duplicating items, setting limits, and managing material, name, enchantment, and lore blacklists.">
+  <title>SimpleDupe</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --night: #081315;
+      --night-raised: #0d1c1f;
+      --ink: #f1f7f5;
+      --muted: #a1b5b3;
+      --faint: #6e8583;
+      --cyan: #36e3dd;
+      --cyan-deep: #123d40;
+      --rule: rgba(188, 225, 222, .14);
+      --display: "Space Grotesk", "Avenir Next", sans-serif;
+      --body: "DM Sans", "Avenir Next", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--night);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    .wrap { width: min(1120px, calc(100% - 48px)); margin-inline: auto; }
+
+    .topbar {
+      position: relative;
+      z-index: 2;
+      border-bottom: 1px solid var(--rule);
+      background: rgba(8, 19, 21, .94);
+    }
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    .wordmark {
+      display: inline-flex;
+      align-items: center;
+      gap: 11px;
+      text-decoration: none;
+      font: 600 19px/1 var(--display);
+    }
+    .wordmark-mark {
+      width: 11px;
+      aspect-ratio: 1;
+      border: 2px solid var(--cyan);
+      border-radius: 50%;
+      box-shadow: 0 0 14px rgba(54, 227, 221, .5);
+    }
+    .nav-links { display: flex; align-items: center; gap: 26px; }
+    .nav-links a {
+      color: var(--muted);
+      font-size: 14px;
+      text-decoration: none;
+      transition: color .18s ease;
+    }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--cyan); }
+    .nav-github { color: var(--ink) !important; }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      border-bottom: 1px solid var(--rule);
+      background-color: var(--night);
+      background-image:
+        linear-gradient(rgba(180, 223, 219, .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(180, 223, 219, .035) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+    .hero::after {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      content: "";
+      pointer-events: none;
+      background: linear-gradient(90deg, var(--night) 0%, rgba(8, 19, 21, .93) 44%, rgba(8, 19, 21, .5) 100%);
+    }
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+      min-height: 470px;
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 36px;
+      padding-block: 58px;
+    }
+    .hero-copy { position: relative; z-index: 1; max-width: 560px; }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 19px;
+      color: var(--cyan);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 22px; height: 1px; background: var(--cyan); content: ""; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 8px;
+      font: 600 58px/1.02 var(--display);
+    }
+    .release-version {
+      margin: 0 0 18px;
+      color: var(--cyan);
+      font: 500 24px/1.25 var(--display);
+    }
+    .hero-description { max-width: 440px; margin-bottom: 27px; color: var(--muted); font-size: 16px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .button {
+      min-height: 48px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 19px;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); }
+    .button-primary { background: var(--cyan); color: #062022; }
+    .button-primary:hover { background: #75f3ec; }
+    .button-secondary { border-color: rgba(207, 238, 234, .25); color: var(--ink); }
+    .button-secondary:hover { border-color: var(--cyan); }
+    .release-state { min-height: 20px; margin: 15px 0 0; color: var(--faint); font-size: 12px; }
+    .release-state[data-state="error"] { color: #ffc38f; }
+    .brand-art {
+      position: relative;
+      z-index: 1;
+      width: min(100%, 460px);
+      justify-self: end;
+      height: auto;
+      display: block;
+      filter: drop-shadow(0 0 36px rgba(0, 222, 219, .14));
+    }
+
+    .shooting-star {
+      position: absolute;
+      z-index: 0;
+      width: 110px;
+      height: 2px;
+      border-radius: 2px;
+      opacity: 0;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, rgba(54, 227, 221, .12), var(--cyan));
+      box-shadow: 0 0 8px rgba(54, 227, 221, .75);
+      transform: rotate(-35deg);
+      animation: shoot 7.5s linear infinite;
+    }
+    .shooting-star::after {
+      position: absolute;
+      right: -2px;
+      top: -2px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      content: "";
+      background: #e3fffc;
+      box-shadow: 0 0 11px 2px var(--cyan);
+    }
+    .star-one { top: 16%; right: 6%; animation-delay: .5s; }
+    .star-two { top: 58%; right: 34%; width: 76px; animation-delay: 3.1s; animation-duration: 9s; }
+    .star-three { top: 82%; right: 13%; width: 88px; animation-delay: 5.3s; animation-duration: 8s; }
+    @keyframes shoot {
+      0%, 64%, 100% { opacity: 0; transform: translate3d(28px, -18px, 0) rotate(-35deg); }
+      68% { opacity: .9; }
+      76% { opacity: 0; transform: translate3d(-100px, 65px, 0) rotate(-35deg); }
+    }
+
+    .features { padding-block: 56px 63px; }
+    .section-heading { max-width: 620px; margin-bottom: 30px; }
+    .section-heading h2 { margin-bottom: 0; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .feature { padding: 20px 24px 0 0; border-top: 1px solid var(--rule); }
+    .feature + .feature { padding-left: 24px; border-left: 1px solid var(--rule); }
+    .feature-index { display: block; margin-bottom: 20px; color: var(--cyan); font: 500 12px/1 var(--display); }
+    .feature h3 { margin-bottom: 8px; font: 500 17px/1.3 var(--display); }
+    .feature p { margin-bottom: 0; color: var(--muted); font-size: 13px; }
+    .feature code { color: var(--cyan); font-size: 12px; }
+
+    .download-section { border-block: 1px solid var(--rule); background: var(--night-raised); }
+    .download-inner { display: grid; grid-template-columns: 1fr .8fr; align-items: center; gap: 72px; padding-block: 42px; }
+    .download-copy h2 { margin-bottom: 10px; font-size: 28px; }
+    .download-copy > p:not(.section-kicker) { max-width: 440px; margin-bottom: 20px; color: var(--muted); font-size: 14px; }
+    .release-facts { display: grid; grid-template-columns: 1fr; }
+    .fact { min-width: 0; display: flex; align-items: baseline; justify-content: space-between; gap: 20px; padding: 12px 0; border-bottom: 1px solid var(--rule); }
+    .fact:first-child { border-top: 1px solid var(--rule); }
+    .fact-label { display: block; margin-bottom: 0; color: var(--faint); font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+    .fact-value { overflow: hidden; display: block; color: var(--ink); font: 500 15px/1.3 var(--display); text-align: right; text-overflow: ellipsis; white-space: nowrap; }
+
+    .details {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(220px, .7fr);
+      gap: 72px;
+      padding-block: 55px 64px;
+    }
+    .section-kicker { margin-bottom: 10px; color: var(--cyan); font-size: 11px; font-weight: 700; letter-spacing: .13em; text-transform: uppercase; }
+    h2 { margin-bottom: 23px; font: 500 26px/1.2 var(--display); }
+    .notes { color: #c5d3d1; font-size: 14px; }
+    .notes h3 { margin: 22px 0 8px; color: var(--ink); font: 600 16px/1.3 var(--display); }
+    .notes p { margin-bottom: 12px; }
+    .notes ul { margin: 0 0 16px; padding-left: 19px; }
+    .notes li { margin: 5px 0; padding-left: 3px; }
+    .notes-empty { color: var(--muted); }
+    .release-link { display: inline-block; margin-top: 12px; color: var(--cyan); font-size: 13px; font-weight: 600; text-decoration: none; }
+    .release-link:hover { text-decoration: underline; }
+    .install { padding-left: 28px; border-left: 1px solid var(--rule); }
+    .install h2 { margin-bottom: 15px; font-size: 20px; }
+    .install p { margin-bottom: 12px; color: var(--muted); font-size: 14px; }
+    .install code { color: var(--cyan); font-size: 13px; }
+    .compatibility { padding-top: 17px; border-top: 1px solid var(--rule); color: var(--faint) !important; font-size: 12px !important; }
+
+    footer { border-top: 1px solid var(--rule); color: var(--faint); font-size: 12px; }
+    .footer-inner { min-height: 66px; display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+    footer a { color: var(--muted); text-decoration: none; }
+    footer a:hover { color: var(--cyan); }
+
+    @media (max-width: 760px) {
+      .wrap { width: min(100% - 36px, 560px); }
+      .nav { min-height: 66px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 13px; }
+      .hero-inner { min-height: 0; grid-template-columns: 1fr; gap: 12px; padding-block: 54px 32px; }
+      .hero-copy { max-width: 100%; }
+      h1 { font-size: 46px; }
+      .hero-description { max-width: 420px; }
+      .brand-art { width: min(100%, 350px); justify-self: center; margin-top: 4px; }
+      .star-two { right: 18%; }
+      .features { padding-block: 42px 46px; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .feature, .feature + .feature { padding: 16px 0; border-left: 0; }
+      .feature-index { margin-bottom: 10px; }
+      .download-inner { grid-template-columns: 1fr; gap: 26px; padding-block: 34px; }
+      .release-facts { grid-template-columns: 1fr; padding-block: 3px; }
+      .fact, .fact + .fact { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding: 13px 0; border-left: 0; }
+      .fact + .fact { border-top: 1px solid var(--rule); }
+      .fact-label { margin: 0; }
+      .fact-value { text-align: right; }
+      .details { grid-template-columns: 1fr; gap: 38px; padding-block: 40px 48px; }
+      .install { padding: 25px 0 0; border-top: 1px solid var(--rule); border-left: 0; }
+    }
+    @media (max-width: 420px) {
+      .wrap { width: calc(100% - 32px); }
+      .nav-links { gap: 12px; }
+      .nav-links a { font-size: 12px; }
+      .nav-links a:first-child { display: none; }
+      h1 { font-size: 40px; }
+      .actions { align-items: stretch; flex-direction: column; }
+      .button { width: 100%; }
+      .footer-inner { align-items: flex-start; flex-direction: column; justify-content: center; padding-block: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav wrap" aria-label="Main navigation">
+      <a class="wordmark" href="#top" aria-label="SimpleDupe home">
+        <span class="wordmark-mark" aria-hidden="true"></span>
+        <span>SimpleDupe</span>
+      </a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#download">Download</a>
+        <a href="#setup">Setup</a>
+        <a class="nav-github" href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero" aria-labelledby="page-title">
+      <span class="shooting-star star-one" aria-hidden="true"></span>
+      <span class="shooting-star star-two" aria-hidden="true"></span>
+      <span class="shooting-star star-three" aria-hidden="true"></span>
+      <div class="hero-inner wrap">
+        <div class="hero-copy">
+          <p class="eyebrow">Item duplication for Paper</p>
+          <h1 id="page-title">SimpleDupe</h1>
+          <p class="release-version" id="release-version">Latest version loading</p>
+          <p class="hero-description">A straightforward way to duplicate items on your server. Set a copy limit, choose what is blocked, and keep control in your hands.</p>
+          <div class="actions">
+            <a class="button button-primary" href="#download">Get SimpleDupe</a>
+            <a class="button button-secondary" href="#features">Explore features</a>
+          </div>
+          <p class="release-state" id="release-state" role="status" aria-live="polite">Loading the latest release details...</p>
+        </div>
+        <img class="brand-art" src="assets/simpledupe-logo.png" alt="SimpleDupe cyan logo">
+      </div>
+    </section>
+
+    <section class="features wrap" id="features" aria-labelledby="features-title">
+      <div class="section-heading">
+        <p class="section-kicker">Made for server owners</p>
+        <h2 id="features-title">Simple to use. Easy to control.</h2>
+      </div>
+      <div class="feature-grid">
+        <article class="feature">
+          <span class="feature-index">01</span>
+          <h3>Set your limit</h3>
+          <p>Choose how many copies a player can make at once, then use <code>/dupe [amount]</code>.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">02</span>
+          <h3>Choose what is blocked</h3>
+          <p>Blacklist materials, custom names, enchantments at selected levels, or matching lore lines.</p>
+        </article>
+        <article class="feature">
+          <span class="feature-index">03</span>
+          <h3>Keep item details</h3>
+          <p>Copies retain their names, lore, enchantments, and other item data. Overflow drops safely nearby.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="download-section" id="download" aria-labelledby="download-title">
+      <div class="download-inner wrap">
+        <div class="download-copy">
+          <p class="section-kicker">Download</p>
+          <h2 id="download-title">Ready for your server.</h2>
+          <p>Get the latest SimpleDupe JAR for Paper. Release details update automatically from GitHub.</p>
+          <a class="button button-primary" id="download-button" href="https://github.com/skitmc/SimpleDupe/releases/latest" target="_blank" rel="noopener noreferrer">View downloads on GitHub</a>
+        </div>
+        <div class="release-facts" aria-label="Latest release details">
+          <div class="fact">
+            <span class="fact-label">Latest version</span>
+            <span class="fact-value" id="download-version">Loading...</span>
+          </div>
+          <div class="fact">
+            <span class="fact-label">Latest release downloads</span>
+            <span class="fact-value" id="download-count">Loading...</span>
+          </div>
+          <div class="fact">
+            <span class="fact-label">Published</span>
+            <span class="fact-value" id="release-date">Loading...</span>
+          </div>
+          <div class="fact">
+            <span class="fact-label">JAR size</span>
+            <span class="fact-value" id="package-size">Loading...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="details wrap">
+      <article id="release-notes" aria-labelledby="notes-title">
+        <p class="section-kicker">Latest update</p>
+        <h2 id="notes-title">Release notes</h2>
+        <div class="notes" id="notes-content">
+          <p class="notes-empty">Loading release notes...</p>
+        </div>
+        <a class="release-link" id="full-notes-link" href="https://github.com/skitmc/SimpleDupe/releases/latest" target="_blank" rel="noopener noreferrer">Read full notes on GitHub</a>
+      </article>
+
+      <aside class="install" id="setup" aria-labelledby="install-title">
+        <p class="section-kicker">Quick setup</p>
+        <h2 id="install-title">Up and running</h2>
+        <p>Download the JAR and place it in your server's <code>plugins</code> folder.</p>
+        <p>Restart your Paper server, then edit <code>plugins/SimpleDupe/config.yml</code> to set your limits and blacklist.</p>
+        <p>Use <code>/dupe [amount]</code> to duplicate an item, or <code>/simpledupereload</code> to reload settings.</p>
+        <p class="compatibility">Requires Paper 1.21.1 and Java 21.</p>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner wrap">
+      <span>SimpleDupe <span id="footer-version">Latest release</span></span>
+      <a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">Source code on GitHub</a>
+    </div>
+  </footer>
+
+  <script>
+    const releaseApi = "https://api.github.com/repos/skitmc/SimpleDupe/releases/latest";
+    const releaseFallback = "https://github.com/skitmc/SimpleDupe/releases/latest";
+    const numberFormat = new Intl.NumberFormat();
+
+    const elements = {
+      version: document.getElementById("release-version"),
+      downloadVersion: document.getElementById("download-version"),
+      date: document.getElementById("release-date"),
+      downloads: document.getElementById("download-count"),
+      size: document.getElementById("package-size"),
+      state: document.getElementById("release-state"),
+      downloadButton: document.getElementById("download-button"),
+      notes: document.getElementById("notes-content"),
+      fullNotes: document.getElementById("full-notes-link"),
+      footerVersion: document.getElementById("footer-version")
+    };
+
+    function formatBytes(bytes) {
+      if (!Number.isFinite(bytes) || bytes <= 0) return "Size unavailable";
+      const units = ["B", "KB", "MB", "GB"];
+      const unitIndex = Math.min(Math.floor(Math.log(bytes) / Math.log(1024)), units.length - 1);
+      const amount = bytes / (1024 ** unitIndex);
+      return `${amount.toFixed(unitIndex === 0 ? 0 : 1)} ${units[unitIndex]}`;
+    }
+
+    function cleanMarkdown(value) {
+      return value
+        .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
+        .replace(/(`{1,3})(.*?)\1/g, "$2")
+        .replace(/(\*\*|__)(.*?)\1/g, "$2")
+        .replace(/[*_~]/g, "")
+        .trim();
+    }
+
+    function renderNotes(markdown) {
+      elements.notes.replaceChildren();
+      const lines = markdown.split(/\r?\n/);
+      let paragraph = [];
+      let list = null;
+
+      function flushParagraph() {
+        if (!paragraph.length) return;
+        const node = document.createElement("p");
+        node.textContent = cleanMarkdown(paragraph.join(" "));
+        elements.notes.append(node);
+        paragraph = [];
+      }
+
+      function closeList() { list = null; }
+
+      for (const rawLine of lines) {
+        const line = rawLine.trim();
+        const heading = line.match(/^#{1,3}\s+(.+)$/);
+        const bullet = line.match(/^[-*]\s+(.+)$/);
+
+        if (!line) {
+          flushParagraph();
+          closeList();
+          continue;
+        }
+        if (/^-{3,}$/.test(line)) {
+          flushParagraph();
+          closeList();
+          continue;
+        }
+        if (heading) {
+          flushParagraph();
+          closeList();
+          const node = document.createElement("h3");
+          node.textContent = cleanMarkdown(heading[1]);
+          elements.notes.append(node);
+          continue;
+        }
+        if (bullet) {
+          flushParagraph();
+          if (!list) {
+            list = document.createElement("ul");
+            elements.notes.append(list);
+          }
+          const item = document.createElement("li");
+          item.textContent = cleanMarkdown(bullet[1]);
+          list.append(item);
+          continue;
+        }
+        closeList();
+        paragraph.push(line);
+      }
+      flushParagraph();
+
+      if (!elements.notes.childElementCount) {
+        const empty = document.createElement("p");
+        empty.className = "notes-empty";
+        empty.textContent = "No release notes have been published yet.";
+        elements.notes.append(empty);
+      }
+    }
+
+    async function loadLatestRelease() {
+      try {
+        const response = await fetch(releaseApi, {
+          headers: { Accept: "application/vnd.github+json" },
+          cache: "no-store"
+        });
+        if (!response.ok) throw new Error(`GitHub returned ${response.status}`);
+
+        const release = await response.json();
+        const assets = Array.isArray(release.assets) ? release.assets : [];
+        const jar = assets.find(asset => (asset.name || "").toLowerCase().endsWith(".jar"));
+        const version = release.tag_name || "Latest release";
+        const releaseUrl = release.html_url || releaseFallback;
+        const totalDownloads = assets.reduce((total, asset) => total + (Number(asset.download_count) || 0), 0);
+
+        elements.version.textContent = version;
+        elements.downloadVersion.textContent = version;
+        elements.footerVersion.textContent = version;
+        elements.date.textContent = release.published_at
+          ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(release.published_at))
+          : "Not provided";
+        elements.downloads.textContent = numberFormat.format(totalDownloads);
+        elements.size.textContent = jar ? formatBytes(jar.size) : "JAR not published";
+        elements.fullNotes.href = releaseUrl;
+        elements.downloadButton.href = jar ? jar.browser_download_url : releaseUrl;
+        elements.downloadButton.textContent = jar ? `Download ${version} JAR` : "View release on GitHub";
+        elements.state.textContent = jar ? "Latest JAR is ready to download." : "No JAR asset found; view the release on GitHub.";
+        renderNotes(release.body || "");
+      } catch (error) {
+        elements.version.textContent = "Latest release";
+        elements.downloadVersion.textContent = "Unavailable";
+        elements.date.textContent = "Unavailable";
+        elements.downloads.textContent = "Unavailable";
+        elements.size.textContent = "Unavailable";
+        elements.downloadButton.href = releaseFallback;
+        elements.downloadButton.textContent = "View downloads on GitHub";
+        elements.state.dataset.state = "error";
+        elements.state.textContent = "Release details could not load. The GitHub release page is still available.";
+        elements.notes.replaceChildren();
+        const note = document.createElement("p");
+        note.className = "notes-empty";
+        note.textContent = "Release notes are available on GitHub.";
+        elements.notes.append(note);
+      }
+    }
+
+    loadLatestRelease();
+  </script>
+</body>
+</html>
