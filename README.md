@@ -6,6 +6,9 @@
   <a href="https://github.com/skitmc/SimpleDupe/releases/latest">
     <img src="https://img.shields.io/badge/Download-Latest%20Release-00bfc7?style=for-the-badge&logo=github&logoColor=white" alt="Download the latest release">
   </a>
+  <a href="https://github.com/skitmc/SimpleDupe/releases/latest">
+    <img src="https://img.shields.io/github/downloads/skitmc/SimpleDupe/latest/total?style=for-the-badge&label=Latest%20release%20downloads" alt="Downloads of the latest release">
+  </a>
 </p>
 
 Paper plugin for duplicating the item in your main hand, with configurable limits and blacklists.
