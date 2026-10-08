@@ -3,32 +3,39 @@
   --night: #081315;
   --surface: #0d1c1f;
   --ink: #f1f7f5;
-  --muted: #a1b5b3;
-  --faint: #718784;
-  --cyan: #36e3dd;
-  --rule: rgba(188, 225, 222, .15);
+  --muted: #b3c5c2;
+  --faint: #91a8a4;
+  --cyan: #42e8e0;
+  --rule: rgba(188, 225, 222, .19);
   --display: "Space Grotesk", "Avenir Next", sans-serif;
   --body: "DM Sans", "Avenir Next", sans-serif;
 }
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+::selection { background: rgba(66, 232, 224, .25); color: var(--ink); }
 body {
   margin: 0;
-  background: var(--night);
+  background: linear-gradient(155deg, #0b181a 0%, var(--night) 55%, #071012 100%);
   color: var(--ink);
   font: 16px/1.55 var(--body);
 }
 a { color: inherit; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--cyan);
+  outline-offset: 4px;
+}
 .container { width: min(1100px, calc(100% - 48px)); margin-inline: auto; }
 h1, h2, h3, p { margin-top: 0; }
 h1, h2, h3 { font-family: var(--display); }
 
 .site-header {
-  position: relative;
-  z-index: 2;
+  position: sticky;
+  top: 0;
+  z-index: 5;
   border-bottom: 1px solid var(--rule);
   background: rgba(8, 19, 21, .96);
+  backdrop-filter: blur(16px);
 }
 .site-nav {
   min-height: 74px;
