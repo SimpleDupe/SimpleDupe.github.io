@@ -55,6 +55,10 @@ h1, h2, h3 { font-family: var(--display); }
 .status-light { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px rgba(66, 232, 224, .8); }
 .status-details span[data-release-version] { color: var(--ink); }
 .site-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
   width: min(1100px, calc(100% - 48px));
   min-height: 66px;
   margin-block: 10px;
