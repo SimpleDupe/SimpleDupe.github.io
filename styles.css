@@ -50,14 +50,10 @@ h1, h2, h3 { font-family: var(--display); }
   color: var(--faint);
   font-size: 9px;
 }
-.status-name, .status-details, .site-status-inner > a { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
+.status-name, .status-details { display: inline-flex; align-items: center; gap: 8px; white-space: nowrap; }
 .status-name { color: var(--muted); }
 .status-light { width: 6px; height: 6px; border-radius: 50%; background: var(--cyan); box-shadow: 0 0 9px rgba(66, 232, 224, .8); }
 .status-details span[data-release-version] { color: var(--ink); }
-.site-status-inner > a { color: var(--cyan); text-decoration: none; }
-.site-status-inner > a:hover { color: var(--ink); }
-.site-status-inner > a span { transition: transform .2s var(--ease-out); }
-.site-status-inner > a:hover span { transform: translateX(3px); }
 .site-nav {
   width: min(1100px, calc(100% - 48px));
   min-height: 66px;
@@ -439,7 +435,6 @@ pre {
   .container { width: min(100% - 36px, 600px); }
   .site-nav { min-height: 62px; }
   .status-details { margin-left: auto; }
-  .site-status-inner > a { display: none; }
   .nav-links { gap: 15px; }
   .nav-links a { font-size: 12px; }
   .hero-inner { min-height: 0; grid-template-columns: 1fr; gap: 10px; padding-block: 44px 30px; }
