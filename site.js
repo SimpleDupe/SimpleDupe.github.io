@@ -94,7 +94,7 @@ async function loadLatestRelease() {
     const jar = assets.find(asset => (asset.name || "").toLowerCase().endsWith(".jar"));
     const version = release.tag_name || "Latest release";
     const releaseUrl = release.html_url || releaseFallback;
-    const downloadCount = assets.reduce((total, asset) => total + (Number(asset.download_count) || 0), 0);
+    const downloadCount = jar ? Number(jar.download_count) || 0 : 0;
     const published = release.published_at
       ? new Intl.DateTimeFormat(undefined, { dateStyle: "medium" }).format(new Date(release.published_at))
       : "Not provided";
@@ -137,7 +137,7 @@ function initScrollReveals() {
   if (reduceMotion || !("IntersectionObserver" in window)) return;
 
   const revealElements = document.querySelectorAll(
-    ".page-intro, .content-section, .home-highlights, .release-bar, .metrics, .feature-grid .feature, .hub-grid .hub-link, .download-layout > *"
+    ".page-intro, .content-section, .control-story, .control-list .control-row, .release-bar, .metrics, .feature-grid .feature, .hub-grid .hub-link, .download-layout > *, .data-table tbody tr"
   );
   if (!revealElements.length) return;
 
