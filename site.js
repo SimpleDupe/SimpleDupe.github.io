@@ -132,6 +132,30 @@ async function loadLatestRelease() {
   }
 }
 
+function initScrollReveals() {
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (reduceMotion || !("IntersectionObserver" in window)) return;
+
+  const revealElements = document.querySelectorAll(
+    ".page-intro, .content-section, .home-highlights, .release-bar, .metrics, .feature-grid .feature, .hub-grid .hub-link, .download-layout > *"
+  );
+  if (!revealElements.length) return;
+
+  document.documentElement.classList.add("motion-ready");
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      entry.target.classList.add("is-visible");
+      observer.unobserve(entry.target);
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -32px 0px" });
+
+  revealElements.forEach(element => {
+    element.classList.add("scroll-reveal");
+    observer.observe(element);
+  });
+}
+
 const legacyPage = {
   "#features": "features.html",
   "#download": "download.html",
@@ -142,5 +166,6 @@ const legacyPage = {
 if (legacyPage && (window.location.pathname.endsWith("/") || window.location.pathname.endsWith("/index.html"))) {
   window.location.replace(legacyPage);
 } else {
+  initScrollReveals();
   loadLatestRelease();
 }
