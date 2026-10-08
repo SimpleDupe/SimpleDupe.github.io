@@ -9,17 +9,11 @@
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header">
-    <div class="site-status">
-      <div class="site-status-inner container">
-        <span class="status-name"><span class="status-light" aria-hidden="true"></span> SIMPLEDUPE / PAPER PLUGIN</span>
-        <span class="status-details">PAPER 1.21.1 <span aria-hidden="true">/</span> JAVA 21 <span aria-hidden="true">/</span> <span data-release-version>Loading...</span></span>
-      </div>
-    </div>
     <nav class="site-nav container" aria-label="Main navigation">
       <a class="brand" href="index.html" aria-label="SimpleDupe home"><img class="brand-icon" src="assets/favicon.svg" alt=""><span>SimpleDupe</span></a>
       <div class="nav-links">
@@ -41,6 +35,7 @@
         <div class="hero-copy">
           <p class="eyebrow">A control-first Paper plugin</p>
           <h1>SimpleDupe</h1>
+          <p class="release-version">Latest version <span data-release-version>Loading...</span></p>
           <p class="hero-manifesto">DUPLICATE ITEMS.<br><span>KEEP CONTROL.</span></p>
           <p class="hero-lede">Choose the limits. Decide what stays off-limits. Simple, configurable item duplication for your Paper server.</p>
           <div class="hero-actions">
@@ -49,24 +44,17 @@
           </div>
           <p class="hero-compatibility">PAPER 1.21.1 <span aria-hidden="true">/</span> JAVA 21 <span aria-hidden="true">/</span> CONFIGURABLE BLACKLISTS</p>
         </div>
-        <div class="hero-showcase">
-          <img class="hero-art" src="assets/simpledupe-logo.png" alt="SimpleDupe cyan infinity logo">
-          <section class="release-panel" aria-label="Latest release details">
-            <div class="release-panel-heading">
-              <p class="section-kicker">Latest stable release</p>
-              <a href="https://github.com/skitmc/SimpleDupe/releases/latest" target="_blank" rel="noopener noreferrer">GITHUB <span aria-hidden="true">&nearr;</span></a>
-            </div>
-            <h2 data-release-version>Loading...</h2>
-            <div class="release-panel-facts">
-              <div><span>Downloads</span><strong data-release-downloads>Loading...</strong></div>
-              <div><span>Published</span><strong data-release-date>Loading...</strong></div>
-              <div><span>JAR size</span><strong data-jar-size>Loading...</strong></div>
-            </div>
-            <p class="release-status" data-release-status role="status" aria-live="polite">Checking latest release...</p>
-            <a class="button button-primary release-download" data-download-jar href="https://github.com/skitmc/SimpleDupe/releases/latest" target="_blank" rel="noopener noreferrer"><span data-download-label>View latest release</span><span aria-hidden="true">&rarr;</span></a>
-          </section>
-        </div>
+        <img class="hero-art" src="assets/simpledupe-logo.png" alt="SimpleDupe cyan infinity logo">
       </div>
+    </section>
+
+    <section class="container release-bar" aria-label="Latest release overview">
+      <div class="metrics">
+        <div class="metric"><span class="metric-label">Latest release</span><span class="metric-value" data-release-version>Loading...</span></div>
+        <div class="metric"><span class="metric-label">Latest release downloads</span><span class="metric-value" data-release-downloads>Loading...</span></div>
+        <div class="metric"><span class="metric-label">Published</span><span class="metric-value" data-release-date>Loading...</span></div>
+      </div>
+      <p class="release-status" data-release-status role="status" aria-live="polite">Loading release details...</p>
     </section>
 
     <section class="control-story container" aria-labelledby="control-title">
