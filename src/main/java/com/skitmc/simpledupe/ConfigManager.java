@@ -2,6 +2,8 @@ package com.skitmc.simpledupe;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -12,8 +14,27 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class ConfigManager {
+
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static final PlainTextComponentSerializer PLAIN_TEXT = PlainTextComponentSerializer.plainText();
+    private static final LegacyComponentSerializer LEGACY_AMPERSAND = LegacyComponentSerializer.builder()
+        .character('&')
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
+    private static final LegacyComponentSerializer LEGACY_SECTION = LegacyComponentSerializer.builder()
+        .character(ChatColor.COLOR_CHAR)
+        .hexColors()
+        .useUnusualXRepeatedCharacterHexFormat()
+        .build();
+    private static final Pattern MINI_MESSAGE_TAG = Pattern.compile(
+        "(?i)</?(?:#[0-9a-f]{3,8}|[a-z][a-z0-9_-]*(?::[^<>]*)?)>"
+    );
+    private static final Pattern AMPERSAND_HEX = Pattern.compile("(?i)&#([0-9a-f]{6})");
 
     private final SimpleDupe plugin;
     private File configFile;
@@ -102,7 +123,7 @@ public class ConfigManager {
     }
 
     private String normalizeText(String value) {
-        return ChatColor.translateAlternateColorCodes('&', value).toLowerCase(Locale.ROOT);
+        return PLAIN_TEXT.serialize(deserialize(value)).toLowerCase(Locale.ROOT);
     }
 
     private String normalizeEnchantment(String value) {
@@ -135,13 +156,38 @@ public class ConfigManager {
      * Gets a Legacy formatted String with color codes translated ('&' -> '§').
      */
     public String getMessageString(String path) {
-        return ChatColor.translateAlternateColorCodes('&', getRawMessage(path));
+        return LEGACY_SECTION.serialize(deserialize(getRawMessage(path)));
     }
 
     /**
      * Gets an Adventure Component for direct player messaging with color codes applied.
      */
     public Component getMessage(String path) {
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(getRawMessage(path));
+        return deserialize(getRawMessage(path));
+    }
+
+    public Component deserialize(String text) {
+        String sectionNormalized = text.replace(ChatColor.COLOR_CHAR, '&');
+        if (MINI_MESSAGE_TAG.matcher(sectionNormalized).find()) {
+            return MINI_MESSAGE.deserialize(sectionNormalized);
+        }
+        return LEGACY_AMPERSAND.deserialize(expandAmpersandHex(sectionNormalized));
+    }
+
+    private String expandAmpersandHex(String text) {
+        Matcher matcher = AMPERSAND_HEX.matcher(text);
+        StringBuffer expanded = new StringBuffer();
+
+        while (matcher.find()) {
+            String hex = matcher.group(1);
+            StringBuilder legacyHex = new StringBuilder("&x");
+            for (int i = 0; i < hex.length(); i++) {
+                legacyHex.append('&').append(hex.charAt(i));
+            }
+            matcher.appendReplacement(expanded, Matcher.quoteReplacement(legacyHex.toString()));
+        }
+
+        matcher.appendTail(expanded);
+        return expanded.toString();
     }
 }

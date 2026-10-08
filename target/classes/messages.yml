@@ -1,5 +1,6 @@
 # SimpleDupe messages
 
+# Supports legacy (&c or section codes), hex (&#RRGGBB), and MiniMessage tags.
 # Global prefix used in plugin messages.
 prefix: "&8[&bSimpleDupe&8] "
 

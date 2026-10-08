@@ -4,7 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.event.ClickEvent;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -45,6 +46,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
         getServer().getScheduler().runTaskAsynchronously(this, this::checkForUpdates);
 
         broadcastCredits();
+        sendConsoleBanner();
     }
 
     private void checkForUpdates() {
@@ -62,13 +64,13 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
             HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
             if (response.statusCode() != 200) {
-                getLogger().warning("GitHub update check returned HTTP " + response.statusCode() + ".");
+                sendConsoleStatus(Component.text("GitHub update check returned HTTP " + response.statusCode() + ".", NamedTextColor.YELLOW));
                 return;
             }
 
             JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
             if (!json.has("tag_name") || !json.has("html_url")) {
-                getLogger().warning("GitHub returned a release without the expected version or URL.");
+                sendConsoleStatus(Component.text("GitHub returned incomplete release data.", NamedTextColor.YELLOW));
                 return;
             }
 
@@ -78,13 +80,15 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
             downloadUrl = json.get("html_url").getAsString();
 
             if (updateAvailable) {
-                getLogger().info("A new update (v" + latestVersion + ") is available on GitHub!");
+                sendConsoleStatus(Component.text("Update v" + latestVersion + " is available.", NamedTextColor.AQUA));
                 getServer().getScheduler().runTask(this, () -> getServer().getOnlinePlayers().stream()
                         .filter(Player::isOp)
                         .forEach(this::sendUpdateNotification));
+            } else {
+                sendConsoleStatus(Component.text("Running the latest release (v" + currentVersion + ").", NamedTextColor.GREEN));
             }
         } catch (Exception e) {
-            getLogger().warning("Unable to check for updates: " + e.getMessage());
+            sendConsoleStatus(Component.text("Unable to check for updates: " + e.getMessage(), NamedTextColor.YELLOW));
         }
     }
 
@@ -132,7 +136,25 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
     }
 
     private Component deserialize(String text) {
-        return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
+        return configManager.deserialize(text);
+    }
+
+    private void sendConsoleBanner() {
+        CommandSender console = getServer().getConsoleSender();
+        Component divider = Component.text("----------------------------------------", NamedTextColor.DARK_AQUA);
+
+        console.sendMessage(divider);
+        console.sendMessage(Component.text("  SIMPLEDUPE ", NamedTextColor.AQUA).decorate(TextDecoration.BOLD)
+                .append(Component.text("v" + getPluginMeta().getVersion(), NamedTextColor.GRAY)));
+        console.sendMessage(Component.text("  Paper plugin | Configurable item duplication", NamedTextColor.GRAY));
+        console.sendMessage(Component.text("  github.com/SimpleDupe/SimpleDupe.github.io", NamedTextColor.DARK_AQUA));
+        console.sendMessage(divider);
+    }
+
+    private void sendConsoleStatus(Component message) {
+        Component prefix = Component.text("[SimpleDupe] ", NamedTextColor.AQUA).decorate(TextDecoration.BOLD);
+        getServer().getScheduler().runTask(this, () ->
+                getServer().getConsoleSender().sendMessage(prefix.append(message)));
     }
 
     private int getMaxDupe(CommandSender sender) {

@@ -4,6 +4,7 @@
 max-dupe-amount: 5
 
 # Items matching any entry below cannot be duplicated.
+# Names and lore support legacy colors, hex codes, and MiniMessage formatting.
 blacklist:
   materials:
     - BEDROCK

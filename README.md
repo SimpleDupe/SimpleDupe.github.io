@@ -54,6 +54,6 @@ blacklist:
   lore: []
 ```
 
-Add material names, custom names, enchantments, or lore entries to their respective lists. `KEY:LEVEL` blocks an enchantment at the specified level and above; `&` color codes are supported in names and lore.
+Add material names, custom names, enchantments, or lore entries to their respective lists. `KEY:LEVEL` blocks an enchantment at the specified level and above. Prefixes, messages, custom names, and lore support legacy colors (`&c` or `§c`), hex colors (`&#42e8e0`), and MiniMessage tags such as `<aqua>text</aqua>`.
 
 Requires Paper 1.21.1 and Java 21.
