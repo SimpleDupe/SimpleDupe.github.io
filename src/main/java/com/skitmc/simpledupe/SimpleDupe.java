@@ -53,7 +53,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
                     .connectTimeout(Duration.ofSeconds(10))
                     .build();
             HttpRequest request = HttpRequest.newBuilder()
-                    .uri(URI.create("https://api.github.com/repos/skitmc/SimpleDupe/releases/latest"))
+                    .uri(URI.create("https://api.github.com/repos/SimpleDupe/SimpleDupe.github.io/releases/latest"))
                     .header("User-Agent", "SimpleDupe-UpdateChecker")
                     .timeout(Duration.ofSeconds(15))
                     .GET()
@@ -118,7 +118,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
         Component line1 = deserialize(configManager.getRawMessage("credit-line-1"));
         Component line2 = deserialize(configManager.getRawMessage("credit-line-2"));
         Component line3 = deserialize(configManager.getRawMessage("credit-line-3"))
-                .clickEvent(ClickEvent.openUrl("https://github.com/skitmc/SimpleDupe"));
+                .clickEvent(ClickEvent.openUrl("https://github.com/SimpleDupe/SimpleDupe.github.io"));
         Component line4 = deserialize(configManager.getRawMessage("credit-line-4"));
 
         Component creditBanner = Component.empty()

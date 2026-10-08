@@ -1,5 +1,5 @@
-const releaseApi = "https://api.github.com/repos/skitmc/SimpleDupe/releases/latest";
-const releaseFallback = "https://github.com/skitmc/SimpleDupe/releases/latest";
+const releaseApi = "https://api.github.com/repos/SimpleDupe/SimpleDupe.github.io/releases/latest";
+const releaseFallback = "https://github.com/SimpleDupe/SimpleDupe.github.io/releases/latest";
 const numberFormat = new Intl.NumberFormat();
 
 function setText(selector, value) {

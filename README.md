@@ -3,11 +3,11 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/skitmc/SimpleDupe/releases/latest">
+  <a href="https://github.com/SimpleDupe/SimpleDupe.github.io/releases/latest">
     <img src="https://img.shields.io/badge/Download-Latest%20Release-00bfc7?style=for-the-badge&logo=github&logoColor=white" alt="Download the latest release">
   </a>
-  <a href="https://github.com/skitmc/SimpleDupe/releases/latest">
-    <img src="https://img.shields.io/github/downloads/skitmc/SimpleDupe/latest/total?style=for-the-badge&label=Latest%20release%20downloads" alt="Downloads of the latest release">
+  <a href="https://github.com/SimpleDupe/SimpleDupe.github.io/releases/latest">
+    <img src="https://img.shields.io/github/downloads/SimpleDupe/SimpleDupe.github.io/latest/total?style=for-the-badge&label=Latest%20release%20downloads" alt="Downloads of the latest release">
   </a>
 </p>
 
@@ -15,7 +15,7 @@ Paper plugin for duplicating the item in your main hand, with configurable limit
 
 ## Install
 
-Download the [latest release](https://github.com/skitmc/SimpleDupe/releases/latest) and place the JAR in your server's `plugins` folder.
+Download the [latest release](https://github.com/SimpleDupe/SimpleDupe.github.io/releases/latest) and place the JAR in your server's `plugins` folder.
 
 ## Commands
 
