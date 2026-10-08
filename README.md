@@ -26,6 +26,10 @@ Download the [latest release](https://github.com/skitmc/SimpleDupe/releases/late
 
 `/dupereload` is an alias for `/simpledupereload`.
 
+## Custom Dupe Limits
+
+Grant `simpledupe.dupe.<number>` to raise a player's maximum above the configured limit. For example, `simpledupe.dupe.8` allows `/dupe` amounts up to 8. The highest numeric limit granted to a player is used; everyone else follows `max-dupe-amount`.
+
 ## Blacklist
 
 Edit `plugins/SimpleDupe/config.yml`:

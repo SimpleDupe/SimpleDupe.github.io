@@ -3,10 +3,10 @@
   --night: #081315;
   --surface: #0d1c1f;
   --ink: #f1f7f5;
-  --muted: #b3c5c2;
-  --faint: #91a8a4;
+  --muted: #bdcecb;
+  --faint: #9aafab;
   --cyan: #42e8e0;
-  --rule: rgba(188, 225, 222, .19);
+  --rule: rgba(188, 225, 222, .17);
   --ease-out: cubic-bezier(.2, .75, .25, 1);
   --display: "Space Grotesk", "Avenir Next", sans-serif;
   --body: "DM Sans", "Avenir Next", sans-serif;
@@ -54,10 +54,10 @@ h1, h2, h3 { font-family: var(--display); }
   text-decoration: none;
 }
 .brand-icon { width: 27px; height: 27px; display: block; }
-.nav-links { display: flex; align-items: center; gap: 25px; }
+.nav-links { display: flex; align-items: center; gap: 17px; }
 .nav-links a {
   position: relative;
-  padding-block: 8px;
+  padding: 8px 5px;
   color: var(--muted);
   font-size: 13px;
   text-decoration: none;
@@ -102,12 +102,12 @@ h1, h2, h3 { font-family: var(--display); }
 .hero-inner {
   position: relative;
   z-index: 1;
-  min-height: 570px;
+  min-height: 530px;
   display: grid;
   grid-template-columns: 1.05fr .95fr;
   align-items: center;
-  gap: 36px;
-  padding-block: 54px;
+  gap: 48px;
+  padding-block: 42px;
 }
 .hero-copy { position: relative; z-index: 1; max-width: 610px; }
 .hero-copy > * { animation: hero-enter .7s var(--ease-out) both; }
@@ -142,7 +142,7 @@ h1 { margin-bottom: 10px; font-size: 68px; font-weight: 600; line-height: 1.02; 
 .hero-art {
   position: relative;
   z-index: 1;
-  width: min(100%, 510px);
+  width: min(100%, 450px);
   height: auto;
   display: block;
   justify-self: end;
@@ -208,7 +208,7 @@ h1 { margin-bottom: 10px; font-size: 68px; font-weight: 600; line-height: 1.02; 
   justify-content: center;
   padding: 0 18px;
   border: 1px solid transparent;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 13px;
   font-weight: 700;
   text-decoration: none;
@@ -228,7 +228,7 @@ h1 { margin-bottom: 10px; font-size: 68px; font-weight: 600; line-height: 1.02; 
 h2 { margin-bottom: 20px; font-size: 27px; font-weight: 500; line-height: 1.2; }
 .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .feature {
-  min-height: 158px;
+  min-height: 146px;
   padding: 17px 24px 0 0;
   border-top: 1px solid var(--rule);
 }
@@ -279,14 +279,14 @@ h2 { margin-bottom: 20px; font-size: 27px; font-weight: 500; line-height: 1.2; }
 .hub-heading .inline-link { flex: 0 0 auto; margin: 0 0 2px; }
 .hub-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
 .hub-link {
-  min-height: 145px;
+  min-height: 132px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   padding: 17px;
   border: 1px solid var(--rule);
-  border-radius: 4px;
+  border-radius: 6px;
   background: rgba(13, 28, 31, .56);
   text-decoration: none;
   transition: border-color .25s ease, background .25s ease, box-shadow .25s ease, transform .25s var(--ease-out);
@@ -302,7 +302,7 @@ h2 { margin-bottom: 20px; font-size: 27px; font-weight: 500; line-height: 1.2; }
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  padding-block: 68px 45px;
+  padding-block: 55px 37px;
   border-bottom: 1px solid var(--rule);
   background-image: linear-gradient(rgba(180, 223, 219, .025) 1px, transparent 1px), linear-gradient(90deg, rgba(180, 223, 219, .025) 1px, transparent 1px);
   background-size: 38px 38px;
@@ -320,9 +320,9 @@ h2 { margin-bottom: 20px; font-size: 27px; font-weight: 500; line-height: 1.2; }
   opacity: .65;
   animation: line-breathe 4s ease-in-out infinite;
 }
-.page-intro h1 { margin-bottom: 12px; font-size: 54px; line-height: 1.04; }
+.page-intro h1 { margin-bottom: 10px; font-size: 48px; line-height: 1.06; }
 .page-intro p:last-child { max-width: 680px; margin-bottom: 0; color: var(--muted); font-size: 15px; }
-.content-section { padding-block: 48px 64px; }
+.content-section { padding-block: 42px 54px; }
 .content-section + .content-section { border-top: 1px solid var(--rule); }
 .content-section h2 { margin-bottom: 15px; font-size: 30px; }
 .content-copy { max-width: 760px; color: var(--muted); font-size: 14px; }

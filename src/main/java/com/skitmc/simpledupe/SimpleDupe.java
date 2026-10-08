@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.permissions.PermissionAttachmentInfo;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.net.URI;
@@ -21,6 +22,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
+import java.util.Locale;
 
 public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Listener {
 
@@ -133,6 +135,30 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
         return LegacyComponentSerializer.legacyAmpersand().deserialize(text);
     }
 
+    private int getMaxDupe(CommandSender sender) {
+        int maxDupe = configManager.getMaxDupe();
+        String permissionPrefix = "simpledupe.dupe.";
+
+        for (PermissionAttachmentInfo permission : sender.getEffectivePermissions()) {
+            if (!permission.getValue()) {
+                continue;
+            }
+
+            String node = permission.getPermission().toLowerCase(Locale.ROOT);
+            if (!node.startsWith(permissionPrefix)) {
+                continue;
+            }
+
+            try {
+                maxDupe = Math.max(maxDupe, Integer.parseInt(node.substring(permissionPrefix.length())));
+            } catch (NumberFormatException ignored) {
+                // Ignore wildcard or otherwise non-numeric permission nodes.
+            }
+        }
+
+        return maxDupe;
+    }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("simpledupereload")) {
@@ -176,7 +202,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
             }
 
             int amount = 1;
-            int maxLimit = configManager.getMaxDupe();
+            int maxLimit = getMaxDupe(player);
 
             if (args.length > 0) {
                 try {

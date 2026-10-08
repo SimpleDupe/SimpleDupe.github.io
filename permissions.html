@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081315">
+  <meta name="description" content="SimpleDupe permission nodes, default access, and custom per-player dupe limits.">
+  <title>SimpleDupe | Permissions</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="SimpleDupe home"><img class="brand-icon" src="assets/favicon.svg" alt=""><span>SimpleDupe</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="download.html">Downloads</a>
+        <a href="setup.html">Setup</a>
+        <a href="permissions.html" aria-current="page">Permissions</a>
+        <a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-intro container">
+      <p class="section-kicker">Access control</p>
+      <h1>Permissions</h1>
+      <p>Choose who can duplicate items, reload the plugin, and use a higher per-player limit.</p>
+    </section>
+
+    <section class="content-section container" aria-labelledby="permissions-title">
+      <h2 id="permissions-title">Permission nodes</h2>
+      <table class="data-table">
+        <thead>
+          <tr><th scope="col">Permission</th><th scope="col">Default</th><th scope="col">What it allows</th></tr>
+        </thead>
+        <tbody>
+          <tr><th scope="row"><code>simpledupe.use</code></th><td>Everyone</td><td>Use <code>/dupe</code>. Players still need this permission when given a custom amount limit.</td></tr>
+          <tr><th scope="row"><code>simpledupe.admin</code></th><td>Operators</td><td>Reload the plugin configuration and messages with <code>/simpledupereload</code> or <code>/dupereload</code>.</td></tr>
+          <tr><th scope="row"><code>simpledupe.dupe.&lt;number&gt;</code></th><td>Not granted</td><td>Raise a player's maximum dupe amount to the number in the node, overriding the configured limit for that player.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="content-section container" aria-labelledby="limits-title">
+      <p class="section-kicker">Custom amount</p>
+      <h2 id="limits-title">Give a player a higher limit</h2>
+      <div class="content-copy">
+        <p>For example, if <code>max-dupe-amount</code> is 5, granting <code>simpledupe.dupe.8</code> lets a player use <code>/dupe 8</code>. The config remains the default for everyone else. If multiple numeric limits are granted, the highest one is used.</p>
+      </div>
+      <pre><code>/lp user &lt;player&gt; permission set simpledupe.dupe.8 true</code></pre>
+      <p class="content-copy">This example uses LuckPerms. Grant the same permission node with your server's permission manager.</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container"><span>SimpleDupe <span data-release-version>Latest release</span></span><a href="https://github.com/skitmc/SimpleDupe" target="_blank" rel="noopener noreferrer">Source code on GitHub</a></div>
+  </footer>
+  <script src="site.js" defer></script>
+</body>
+</html>
