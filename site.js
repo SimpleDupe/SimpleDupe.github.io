@@ -106,7 +106,10 @@ async function loadLatestRelease() {
 
     document.querySelectorAll("[data-download-jar]").forEach(link => {
       link.href = jar ? jar.browser_download_url : releaseUrl;
-      link.textContent = jar ? `Download ${version} JAR` : "View release on GitHub";
+      const label = link.querySelector("[data-download-label]");
+      const text = jar ? `Download ${version} JAR` : "View release on GitHub";
+      if (label) label.textContent = text;
+      else link.textContent = text;
     });
     document.querySelectorAll("[data-release-link]").forEach(link => { link.href = releaseUrl; });
     document.querySelectorAll("[data-release-status]").forEach(status => {
@@ -121,7 +124,9 @@ async function loadLatestRelease() {
 
     document.querySelectorAll("[data-download-jar]").forEach(link => {
       link.href = releaseFallback;
-      link.textContent = "View downloads on GitHub";
+      const label = link.querySelector("[data-download-label]");
+      if (label) label.textContent = "View downloads on GitHub";
+      else link.textContent = "View downloads on GitHub";
     });
     document.querySelectorAll("[data-release-link]").forEach(link => { link.href = releaseFallback; });
     document.querySelectorAll("[data-release-status]").forEach(status => {
