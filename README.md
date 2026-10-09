@@ -27,12 +27,6 @@ Download the [latest release](https://github.com/SimpleDupe/SimpleDupe.github.io
 
 `/dupereload` is an alias for `/simpledupereload`.
 
-## Requests
-
-Choose **Plugin request** or **Website request** from the GitHub issue templates in `.github/ISSUE_TEMPLATE/`. Each form asks for an email or Discord contact; only plugin requests ask for a Minecraft username.
-
-The website form is `request.html`. To receive submissions, create a form at [Formspree](https://formspree.io/), replace `YOUR_FORM_ID` in the form's `action` URL with your endpoint ID, and set a verified recipient address in Formspree. GitHub's `users.noreply` address is for commit privacy and may not receive messages.
-
 ## Custom Dupe Limits
 
 Grant `simpledupe.dupe.<number>` to raise a player's maximum above the configured limit. For example, `simpledupe.dupe.8` allows `/dupe` amounts up to 8. The highest numeric limit granted to a player is used; everyone else follows `max-dupe-amount`.
