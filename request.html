@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#081315">
+  <meta name="description" content="Send a plugin or website request to the SimpleDupe team.">
+  <title>SimpleDupe | Requests</title>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="icon" type="image/png" sizes="256x256" href="assets/profile-picture.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <nav class="site-nav container" aria-label="Main navigation">
+      <a class="brand" href="index.html" aria-label="SimpleDupe home"><img class="brand-icon" src="assets/favicon.svg" alt=""><span>SimpleDupe</span></a>
+      <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="features.html">Features</a>
+        <a href="download.html">Downloads</a>
+        <a href="setup.html">Setup</a>
+        <a href="permissions.html">Permissions</a>
+        <a href="request.html" aria-current="page">Requests</a>
+        <a href="https://github.com/SimpleDupe/SimpleDupe.github.io" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="page-intro container">
+      <p class="section-kicker">Feedback</p>
+      <h1>Send a request.</h1>
+      <p>Choose a plugin or website request and include a way for us to reply.</p>
+    </section>
+
+    <section class="content-section container" aria-labelledby="request-title">
+        <form class="request-form" id="request-form" action="https://formspree.io/f/YOUR_FORM_ID" method="post">
+          <input type="hidden" name="_subject" id="request-subject" value="SimpleDupe Plugin request">
+
+        <fieldset class="request-contact">
+          <legend>Contact</legend>
+          <p class="form-note">Enter at least one: email or Discord username.</p>
+          <div class="form-grid">
+            <label for="contact-email">Email <span>optional</span>
+              <input id="contact-email" name="email" type="email" autocomplete="email" placeholder="you@example.com">
+            </label>
+            <label for="contact-discord">Discord username <span>optional</span>
+              <input id="contact-discord" name="discord_username" type="text" autocomplete="off" placeholder="yourname">
+            </label>
+          </div>
+        </fieldset>
+
+          <fieldset class="request-type">
+            <legend>Request type</legend>
+            <div class="request-choice">
+              <label><input type="radio" name="request_type" value="Plugin" checked><span>Plugin</span></label>
+              <label><input type="radio" name="request_type" value="Website"><span>Website</span></label>
+            </div>
+        </fieldset>
+
+        <section class="request-fields" id="plugin-fields" aria-label="Plugin request details">
+          <h2 id="request-title">Plugin idea</h2>
+          <div class="form-grid">
+            <label for="minecraft-username">Minecraft username <span>optional</span>
+              <input id="minecraft-username" name="minecraft_username" type="text" autocomplete="off" placeholder="PlayerName">
+            </label>
+            <label for="plugin-name">Plugin name or idea
+              <input id="plugin-name" name="plugin_idea" type="text" required placeholder="Custom blacklist presets">
+            </label>
+          </div>
+          <label for="plugin-details">Detailed description and questions
+            <textarea id="plugin-details" name="plugin_details" rows="7" required placeholder="What should it do? What problem would it solve?"></textarea>
+          </label>
+        </section>
+
+        <section class="request-fields" id="website-fields" aria-label="Website request details" hidden>
+          <h2>Website idea</h2>
+          <div class="form-grid">
+            <label for="website-page">Website page or area
+              <select id="website-page" name="website_area" required disabled>
+                <option value="" selected disabled>Select a page</option>
+                <option>Home</option>
+                <option>Features</option>
+                <option>Downloads</option>
+                <option>Setup</option>
+                <option>Permissions</option>
+                <option>Other</option>
+              </select>
+            </label>
+            <label for="website-idea">Website idea or issue
+              <input id="website-idea" name="website_idea" type="text" required disabled placeholder="Add a compatibility table">
+            </label>
+            <label for="browser-device">Browser and device <span>optional</span>
+              <input id="browser-device" name="browser_device" type="text" disabled placeholder="Chrome on Windows 11">
+            </label>
+          </div>
+          <label for="website-details">Detailed description and questions
+            <textarea id="website-details" name="website_details" rows="7" required disabled placeholder="What did you expect? What happened? Include steps for display issues."></textarea>
+          </label>
+        </section>
+
+          <button class="button button-primary" type="submit">Send request <span aria-hidden="true">&rarr;</span></button>
+        </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner container"><span>SimpleDupe <span data-release-version>Latest release</span></span><a href="https://github.com/SimpleDupe/SimpleDupe.github.io" target="_blank" rel="noopener noreferrer">Source code on GitHub</a></div>
+  </footer>
+  <script src="site.js" defer></script>
+  <script>
+    const form = document.getElementById("request-form");
+    const email = document.getElementById("contact-email");
+    const discord = document.getElementById("contact-discord");
+    const pluginFields = document.getElementById("plugin-fields");
+    const websiteFields = document.getElementById("website-fields");
+
+    function setRequestType(type) {
+      const isWebsite = type === "Website";
+      pluginFields.hidden = isWebsite;
+      websiteFields.hidden = !isWebsite;
+      pluginFields.querySelectorAll("input, textarea, select").forEach(field => { field.disabled = isWebsite; });
+      websiteFields.querySelectorAll("input, textarea, select").forEach(field => { field.disabled = !isWebsite; });
+      form.querySelector(`input[name="request_type"][value="${type}"]`).checked = true;
+      document.getElementById("request-subject").value = `SimpleDupe ${type} request`;
+    }
+
+    form.querySelectorAll('input[name="request_type"]').forEach(choice => {
+      choice.addEventListener("change", () => setRequestType(choice.value));
+    });
+
+    function validateContact() {
+      const missingContact = !email.value.trim() && !discord.value.trim();
+      const message = missingContact ? "Enter an email address or Discord username so we can reply." : "";
+      email.setCustomValidity(message);
+      discord.setCustomValidity(message);
+      return !missingContact;
+    }
+
+    email.addEventListener("input", validateContact);
+    discord.addEventListener("input", validateContact);
+    form.addEventListener("submit", event => {
+      if (!validateContact()) {
+        event.preventDefault();
+        email.reportValidity();
+      }
+    });
+
+    setRequestType("Plugin");
+  </script>
+</body>
+</html>

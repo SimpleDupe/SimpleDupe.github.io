@@ -1,0 +1,49 @@
+name: Plugin request
+description: Suggest a plugin feature or ask a plugin question
+title: "[Plugin] "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Share a plugin idea, behavior question, or improvement request.
+  - type: input
+    id: minecraft_username
+    attributes:
+      label: Minecraft username
+      description: Your in-game name, if relevant.
+      placeholder: PlayerName
+    validations:
+      required: false
+  - type: input
+    id: contact
+    attributes:
+      label: Contact email or Discord username
+      description: At least one contact method is required. Enter an email or Discord username here.
+      placeholder: name@example.com or username
+    validations:
+      required: true
+  - type: input
+    id: discord_username
+    attributes:
+      label: Discord username
+      description: Optional if you entered your Discord username in the contact field.
+      placeholder: username
+    validations:
+      required: false
+  - type: input
+    id: plugin_idea
+    attributes:
+      label: Plugin name or idea
+      description: Give your request a short, clear title.
+      placeholder: Custom item blacklist presets
+    validations:
+      required: true
+  - type: textarea
+    id: details
+    attributes:
+      label: Detailed description and questions
+      description: Explain what you want, how it should work, and any questions you have.
+      placeholder: What problem would this solve? How should the feature behave?
+      render: markdown
+    validations:
+      required: true
