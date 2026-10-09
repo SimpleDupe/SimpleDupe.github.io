@@ -70,8 +70,8 @@
         </article>
         <article class="feature">
           <span class="feature-index">06 / INVENTORY</span>
-          <h3>Control inventory overflow</h3>
-          <p>By default, overflow stays off the ground and the player is notified. Set <code>drop-overflow-items: true</code> to drop leftovers at the player's location.</p>
+          <h3>Handle full inventories</h3>
+          <p>Items that do not fit in the inventory are dropped naturally at the player's location.</p>
         </article>
       </div>
     </section>
@@ -82,10 +82,7 @@
       <div class="content-copy">
         <p>Use separate lists for each kind of blacklist rule. Names and lore support ampersand color codes; enchantment levels are inclusive thresholds.</p>
       </div>
-      <pre><code>max-dupe-amount: 5
-    drop-overflow-items: false
-
-    blacklist:
+      <pre><code>blacklist:
   materials:
     - BEDROCK
   names: []
