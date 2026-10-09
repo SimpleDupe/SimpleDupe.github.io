@@ -27,6 +27,7 @@ import java.util.Locale;
 
 public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Listener {
 
+    private static final String WEBSITE_URL = "https://simpledupe.github.io/";
     private ConfigManager configManager;
 
     private volatile boolean updateAvailable = false;
@@ -40,6 +41,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
 
         if (this.getCommand("dupe") != null) this.getCommand("dupe").setExecutor(this);
         if (this.getCommand("simpledupereload") != null) this.getCommand("simpledupereload").setExecutor(this);
+        if (this.getCommand("simpledupeguide") != null) this.getCommand("simpledupeguide").setExecutor(this);
 
         getServer().getPluginManager().registerEvents(this, this);
 
@@ -183,6 +185,16 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        if (command.getName().equalsIgnoreCase("simpledupeguide")) {
+            if (!sender.isOp()) {
+                sender.sendMessage(configManager.getMessage("no-permission"));
+                return true;
+            }
+
+            sendGuide(sender);
+            return true;
+        }
+
         if (command.getName().equalsIgnoreCase("simpledupereload")) {
             if (!sender.hasPermission("simpledupe.admin")) {
                 sender.sendMessage(configManager.getMessage("no-permission"));
@@ -248,17 +260,49 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
                 return true;
             }
 
+            int duplicatedAmount = 0;
+            boolean inventoryFull = false;
+            boolean dropOverflowItems = configManager.shouldDropOverflowItems();
+
             for (int i = 0; i < amount; i++) {
                 ItemStack duplicatedItem = itemInHand.clone();
-                player.getInventory().addItem(duplicatedItem).values().forEach(remainingItem -> 
-                    player.getWorld().dropItemNaturally(player.getLocation(), remainingItem)
-                );
+                var remainingItems = player.getInventory().addItem(duplicatedItem);
+
+                if (remainingItems.isEmpty()) {
+                    duplicatedAmount++;
+                    continue;
+                }
+
+                if (!dropOverflowItems) {
+                    inventoryFull = true;
+                    break;
+                }
+
+                remainingItems.values().forEach(remainingItem ->
+                        player.getWorld().dropItemNaturally(player.getLocation(), remainingItem));
+                duplicatedAmount++;
             }
 
-            String rawMsg = configManager.getRawMessage("success").replace("%amount%", String.valueOf(amount));
-            player.sendMessage(deserialize(rawMsg));
+            if (duplicatedAmount > 0) {
+                String rawMsg = configManager.getRawMessage("success")
+                        .replace("%amount%", String.valueOf(duplicatedAmount));
+                player.sendMessage(deserialize(rawMsg));
+            }
+            if (inventoryFull) {
+                player.sendMessage(configManager.getMessage("inventory-full"));
+            }
             return true;
         }
         return false;
+    }
+
+    private void sendGuide(CommandSender sender) {
+        sender.sendMessage(deserialize(configManager.getRawMessage("guide-title")));
+        for (int step = 1; step <= 5; step++) {
+            sender.sendMessage(deserialize(configManager.getRawMessage("guide-step-" + step)));
+        }
+        sender.sendMessage(deserialize(configManager.getRawMessage("guide-website"))
+                .clickEvent(ClickEvent.openUrl(WEBSITE_URL)));
+        sender.sendMessage(deserialize(configManager.getRawMessage("guide-footer")));
     }
 }

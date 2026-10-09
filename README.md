@@ -23,6 +23,7 @@ Download the [latest release](https://github.com/SimpleDupe/SimpleDupe.github.io
 | --- | --- |
 | `/dupe [amount]` | `simpledupe.use` |
 | `/simpledupereload` | `simpledupe.admin` |
+| `/simpledupeguide` | `simpledupe.guide` (operators) |
 
 `/dupereload` is an alias for `/simpledupereload`.
 
@@ -39,6 +40,7 @@ Edit `plugins/SimpleDupe/config.yml`:
 #
 # Maximum number of items a player can duplicate at once.
 max-dupe-amount: 5
+drop-overflow-items: false
 
 # Items matching any entry below cannot be duplicated.
 blacklist:
@@ -54,6 +56,6 @@ blacklist:
   lore: []
 ```
 
-Add material names, custom names, enchantments, or lore entries to their respective lists. `KEY:LEVEL` blocks an enchantment at the specified level and above. Prefixes, messages, custom names, and lore support legacy colors (`&c` or `§c`), hex colors (`&#42e8e0`), and MiniMessage tags such as `<aqua>text</aqua>`.
+Set `drop-overflow-items` to `true` to drop duplicated items that do not fit; the default `false` keeps them off the ground and notifies the player. Add material names, custom names, enchantments, or lore entries to their respective lists. `KEY:LEVEL` blocks an enchantment at the specified level and above. Prefixes, messages, custom names, and lore support legacy colors (`&c` or `§c`), hex colors (`&#42e8e0`), and MiniMessage tags such as `<aqua>text</aqua>`.
 
 Requires Paper 1.21.1 and Java 21.

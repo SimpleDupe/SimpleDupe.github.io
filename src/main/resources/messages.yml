@@ -1,30 +1,9 @@
-# SimpleDupe messages
-
-# Supports legacy (&c or section codes), hex (&#RRGGBB), and MiniMessage tags.
-# Global prefix used in plugin messages.
-prefix: "&8[&bSimpleDupe&8] "
-
-# General command feedback
-no-permission: "%prefix%&cYou do not have permission to do that."
-only-players: "%prefix%&cThis command can only be used by players in-game."
-invalid-usage: "%prefix%&cUsage: &f/dupe [amount]"
-
-# Duplicate command messages
-no-item: "%prefix%&cHold an item in your main hand to duplicate it."
-blacklisted: "%prefix%&cThat item is blacklisted and cannot be duplicated."
-invalid-number: "%prefix%&cEnter a valid number from &f1 &cto &f%max%&c."
-exceeds-max: "%prefix%&cYou cannot duplicate more than &f%max% &citems at once."
-success: "%prefix%&aDuplicated &f%amount%x &aitem(s) successfully!"
-reload-success: "%prefix%&aConfiguration reloaded successfully."
-
-# Update notification for admins/ops
-update-line-1: "&8&m----------------------------------------"
-update-line-2: " &b&l[SimpleDupe] &aA new update is available! &e(v%version%)"
-update-line-3: " &e&nClick here to download the latest version"
-update-line-4: "&8&m----------------------------------------"
-
-# Credit banner shown on plugin startup
-credit-line-1: "&8&m----------------------------------------"
-credit-line-2: " &b&lSimpleDupe &7| Created by &b&lSkitMC &7(&d&lSkitxoe&7)"
-credit-line-3: " &e&nClick here to visit the GitHub repository"
-credit-line-4: "&8&m----------------------------------------"
+inventory-full: "%prefix%&cYour inventory is full! Remaining duplicates were not dropped."
+guide-title: "&8&m----------------------------------------"
+guide-step-1: "%prefix%&b1/5 &fDownload the plugin from the Downloads page."
+guide-step-2: "%prefix%&b2/5 &fPut the JAR in your server's &bplugins &ffolder, then restart the server."
+guide-step-3: "%prefix%&b3/5 &fSet &bmax-dupe-amount &fin &bconfig.yml&f. Set &bdrop-overflow-items: true &fto drop overflow instead of showing a full-inventory message."
+guide-step-4: "%prefix%&b4/5 &fHold an item and run &b/dupe [amount]&f. Grant &bsimpledupe.dupe.8 &fto allow up to 8 copies."
+guide-step-5: "%prefix%&b5/5 &fEdit &bmessages.yml &for &bconfig.yml&f, then run &b/simpledupereload &fto apply changes."
+guide-website: "%prefix%&bWebsite: &fhttps://simpledupe.github.io/ &7(click to open)"
+guide-footer: "&8&m----------------------------------------"

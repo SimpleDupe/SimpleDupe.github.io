@@ -3,6 +3,9 @@
 # Maximum number of items a player can duplicate at once.
 max-dupe-amount: 5
 
+# Drop overflow items when a player's inventory is full.
+drop-overflow-items: false
+
 # Items matching any entry below cannot be duplicated.
 # Names and lore support legacy colors, hex codes, and MiniMessage formatting.
 blacklist:

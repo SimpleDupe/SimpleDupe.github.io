@@ -1,4 +1,4 @@
-<!doctype html>
+know <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -56,6 +56,7 @@
         <tbody>
           <tr><th scope="row"><code>/dupe [amount]</code></th><td><code>simpledupe.use</code></td><td>Duplicate the item held in your main hand.</td></tr>
           <tr><th scope="row"><code>/simpledupereload</code></th><td><code>simpledupe.admin</code></td><td>Reload the plugin config and messages. Alias: <code>/dupereload</code>.</td></tr>
+          <tr><th scope="row"><code>/simpledupeguide</code></th><td><code>simpledupe.guide</code></td><td>Show the setup guide and website link. Operators only.</td></tr>
         </tbody>
       </table>
       <p class="content-copy">The use permission is granted to everyone by default. Reload permission is for operators by default.</p>
@@ -68,6 +69,7 @@
       <pre><code># SimpleDupe configuration
 # Maximum number of items a player can duplicate at once.
 max-dupe-amount: 5
+drop-overflow-items: false
 
 # Items matching any entry below cannot be duplicated.
 blacklist:

@@ -138,6 +138,10 @@ public class ConfigManager {
         return Math.max(1, plugin.getConfig().getInt("max-dupe-amount", 5));
     }
 
+    public boolean shouldDropOverflowItems() {
+        return plugin.getConfig().getBoolean("drop-overflow-items", false);
+    }
+
     /**
      * Gets the raw String from messages.yml with %prefix% replaced.
      */
