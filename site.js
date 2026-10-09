@@ -156,37 +156,6 @@ function initScrollReveals() {
   });
 }
 
-// Function to track downloads and send a Discord webhook notification
-function initDownloadTracking() {
-    const webhookUrl = "https://discord.com/api/webhooks/1558083764427690086/xDx6MbunLs2zeW-Yfo9Js2tIwd7yjZx4OD9ykFecoxODQzRhwyqOgkmbREjR65y-E3tL";
-
-    document.addEventListener("click", (event) => {
-        const link = event.target.closest("[data-download-jar]");
-        if (!link) return;
-
-        try {
-            const versionElement = document.querySelector("[data-release-version]");
-            const versionName = versionElement ? versionElement.textContent : "Latest";
-
-            fetch(webhookUrl, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    content: null,
-                    embeds: [{
-                        title: "📥 Plugin Downloaded!",
-                        description: `A user just clicked to download version **${versionName}** from the website.`,
-                        color: 3066993,
-                        timestamp: new Date().toISOString()
-                    }]
-                })
-            }).catch(err => console.error("Webhook error:", err));
-        } catch (e) {
-            console.error("Tracking error:", e);
-        }
-    });
-}
-
 const legacyPage = {
   "#features": "features.html",
   "#download": "download.html",
@@ -199,5 +168,4 @@ if (legacyPage && (window.location.pathname.endsWith("/") || window.location.pat
 } else {
   initScrollReveals();
   loadLatestRelease();
-  initDownloadTracking();
 }
