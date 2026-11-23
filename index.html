@@ -23,7 +23,7 @@
         <a href="download.html">Downloads</a>
         <a href="setup.html">Setup</a>
         <a href="permissions.html">Permissions</a>
-        <a href="https://github.com/SimpleDupe/SimpleDupe.github.io" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="nav-cta" href="download.html">Get SimpleDupe</a>
       </div>
     </nav>
   </header>
@@ -35,18 +35,28 @@
       <span class="shooting-star star-three" aria-hidden="true"></span>
       <div class="hero-inner container">
         <div class="hero-copy">
-          <p class="eyebrow">A control-first Paper plugin</p>
+          <div class="hero-badge"><span></span> A control-first Paper plugin</div>
           <h1>SimpleDupe</h1>
-          <p class="release-version">Latest version <span data-release-version>Loading...</span></p>
-          <p class="hero-manifesto">DUPLICATE ITEMS.<br><span>KEEP CONTROL.</span></p>
-          <p class="hero-lede">Choose the limits. Decide what stays off-limits. Simple, configurable item duplication for your Paper server.</p>
+          <p class="release-version">Latest version <strong data-release-version>Loading...</strong></p>
+          <p class="hero-manifesto">Duplicate items.<br><span>Keep control.</span></p>
+          <p class="hero-lede">A fast, configurable duplication plugin built for servers that need clear limits and precise blacklist rules.</p>
           <div class="hero-actions">
             <a class="button button-primary" href="download.html">Download SimpleDupe <span aria-hidden="true">&rarr;</span></a>
             <a class="button button-secondary" href="features.html">Explore features</a>
           </div>
-          <p class="hero-compatibility">PAPER 1.21.1 <span aria-hidden="true">/</span> JAVA 21 <span aria-hidden="true">/</span> CONFIGURABLE BLACKLISTS</p>
+          <div class="hero-proof">
+            <span><b>Paper</b> 1.21.1+</span>
+            <span><b>Java</b> 21+</span>
+            <span><b>Open</b> source</span>
+          </div>
         </div>
-        <img class="hero-art" src="assets/simpledupe-logo.png" alt="SimpleDupe cyan infinity logo">
+        <div class="hero-visual" aria-label="SimpleDupe plugin preview">
+          <div class="hero-orbit orbit-one"></div>
+          <div class="hero-orbit orbit-two"></div>
+          <img class="hero-art" src="assets/simpledupe-logo.png" alt="SimpleDupe cyan infinity logo">
+          <div class="hero-status-card hero-status-top"><span class="status-dot"></span><div><small>Plugin status</small><strong>Active</strong></div></div>
+          <div class="hero-status-card hero-status-bottom"><small>Current limit</small><strong>Up to 8 copies</strong></div>
+        </div>
       </div>
     </section>
 
@@ -62,37 +72,40 @@
     <section class="control-story container" aria-labelledby="control-title">
       <div class="control-intro">
         <p class="section-kicker">Built around your rules</p>
-        <h2 id="control-title">You decide<br>what gets copied.</h2>
-        <p>Set a simple amount limit, then use precise blacklist rules for the items your server wants to protect.</p>
+        <h2 id="control-title">You decide<br><span>what gets copied.</span></h2>
+        <p>Set a global amount limit, grant higher limits to selected players, and protect anything that should stay unique.</p>
         <a class="inline-link" href="features.html">See how it works <span aria-hidden="true">&rarr;</span></a>
       </div>
       <div class="control-list" aria-label="Blacklist options">
         <div class="control-row"><span class="control-type">01 / MATERIAL</span><span class="control-value">BEDROCK</span></div>
         <div class="control-row"><span class="control-type">02 / ENCHANTMENT</span><span class="control-value">SHARPNESS:6+</span></div>
-        <div class="control-row"><span class="control-type">03 / LORE</span><span class="control-value">&amp;ctest</span></div>
-        <div class="control-row"><span class="control-type">04 / CUSTOM NAME</span><span class="control-value">Your own rule</span></div>
+        <div class="control-row"><span class="control-type">03 / LORE</span><span class="control-value">Limited Edition</span></div>
+        <div class="control-row"><span class="control-type">04 / CUSTOM NAME</span><span class="control-value">Rare Reward</span></div>
       </div>
     </section>
 
     <section class="hub-section container" aria-labelledby="hub-title">
       <div class="hub-heading">
         <div>
-          <p class="section-kicker">The essentials</p>
+          <p class="section-kicker">One plugin. Every control.</p>
           <h2 id="hub-title">Make it yours.</h2>
         </div>
         <a class="inline-link" href="https://github.com/SimpleDupe/SimpleDupe.github.io" target="_blank" rel="noopener noreferrer">View source on GitHub</a>
       </div>
       <nav class="hub-grid" aria-label="SimpleDupe pages">
         <a class="hub-link" href="features.html">
-          <span><span class="hub-index">01</span><strong>Features</strong><small>Explore the controls and blacklist rules</small></span>
-          <span class="hub-arrow" aria-hidden="true">&rarr;</span>
-        </a>
-        <a class="hub-link" href="download.html">
-          <span><span class="hub-index">02</span><strong>Downloads</strong><small>Get the latest build and release notes</small></span>
+          <span class="hub-icon" aria-hidden="true">01</span>
+          <span><strong>Features</strong><small>Limits, blacklists, item data, and overflow controls</small></span>
           <span class="hub-arrow" aria-hidden="true">&rarr;</span>
         </a>
         <a class="hub-link" href="setup.html">
-          <span><span class="hub-index">03</span><strong>Setup</strong><small>Install, configure, and use commands</small></span>
+          <span class="hub-icon" aria-hidden="true">02</span>
+          <span><strong>Quick setup</strong><small>Install the JAR and configure your server</small></span>
+          <span class="hub-arrow" aria-hidden="true">&rarr;</span>
+        </a>
+        <a class="hub-link" href="permissions.html">
+          <span class="hub-icon" aria-hidden="true">03</span>
+          <span><strong>Permissions</strong><small>Control access and per-player amount limits</small></span>
           <span class="hub-arrow" aria-hidden="true">&rarr;</span>
         </a>
       </nav>
