@@ -12,6 +12,10 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -40,6 +44,7 @@ public class ConfigManager {
     private File configFile;
     private File messagesFile;
     private FileConfiguration messagesConfig;
+    private FileConfiguration defaultMessagesConfig;
 
     public ConfigManager(SimpleDupe plugin) {
         this.plugin = plugin;
@@ -61,9 +66,21 @@ public class ConfigManager {
             plugin.saveResource("messages.yml", false);
         }
 
+        try (InputStream resource = plugin.getResource("messages.yml")) {
+            if (resource == null) {
+                throw new IllegalStateException("messages.yml is missing from the plugin JAR");
+            }
+            defaultMessagesConfig = YamlConfiguration.loadConfiguration(
+                    new InputStreamReader(resource, StandardCharsets.UTF_8));
+        } catch (IOException | IllegalStateException e) {
+            plugin.getLogger().severe("Unable to load default messages.yml: " + e.getMessage());
+            defaultMessagesConfig = new YamlConfiguration();
+        }
+
         // Wipe runtime memory cache and pull fresh disk configurations
         plugin.reloadConfig();
         messagesConfig = YamlConfiguration.loadConfiguration(messagesFile);
+        messagesConfig.setDefaults(defaultMessagesConfig);
     }
 
     public boolean isBlacklisted(ItemStack item) {
@@ -146,10 +163,10 @@ public class ConfigManager {
      * Gets the raw String from messages.yml with %prefix% replaced.
      */
     public String getRawMessage(String path) {
-        String msg = messagesConfig.getString(path, "");
+        String msg = messagesConfig.getString(path);
         String prefix = messagesConfig.getString("prefix", "&8[&bSimpleDupe&8] ");
 
-        if (msg.isEmpty()) {
+        if (msg == null) {
             return "&cMissing configuration string entry: " + path;
         }
 

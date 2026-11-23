@@ -1,4 +1,52 @@
+# ============================================================
+# SimpleDupe Messages
+# ============================================================
+# Edit this file, then run /simpledupereload.
+# Use %prefix% to add the prefix, and %max% or %amount% where noted.
+
+# ------------------------------------------------------------
+# General
+# ------------------------------------------------------------
+prefix: "&8[&bSimpleDupe&8] "
+
+# ------------------------------------------------------------
+# Command Responses
+# ------------------------------------------------------------
+no-permission: "%prefix%&cYou don't have permission to use this command."
+reload-success: "%prefix%&aConfiguration and messages reloaded."
+invalid-usage: "%prefix%&cUsage: /dupe [amount]"
+only-players: "%prefix%&cOnly players can use this command."
+
+# ------------------------------------------------------------
+# Duplication Checks
+# ------------------------------------------------------------
+no-item: "%prefix%&cYou must hold an item in your main hand."
+blacklisted: "%prefix%&cThat item cannot be duplicated."
+invalid-number: "%prefix%&cEnter a valid positive amount. Maximum: %max%."
+exceeds-max: "%prefix%&cYou can duplicate at most %max% item stacks at once."
+success: "%prefix%&aDuplicated the item %amount% time(s)."
 inventory-full: "%prefix%&cYour inventory is full! Remaining duplicates were not dropped."
+
+# ------------------------------------------------------------
+# Startup Credits
+# ------------------------------------------------------------
+credit-line-1: "&8&m----------------------------------------"
+credit-line-2: "&bSimpleDupe &7is enabled."
+credit-line-3: "&7Plugin page: &bgithub.com/SimpleDupe/SimpleDupe.github.io"
+credit-line-4: "&8&m----------------------------------------"
+
+# ------------------------------------------------------------
+# Update Notification
+# ------------------------------------------------------------
+# %version% is replaced with the latest available version.
+update-line-1: "&8&m----------------------------------------"
+update-line-2: "%prefix%&eVersion %version% is available."
+update-line-3: "%prefix%&bDownload the update here."
+update-line-4: "&8&m----------------------------------------"
+
+# ------------------------------------------------------------
+# /simpledupeguide Output
+# ------------------------------------------------------------
 guide-title: "&8&m----------------------------------------"
 guide-step-1: "%prefix%&b1/5 &fDownload the plugin from the Downloads page."
 guide-step-2: "%prefix%&b2/5 &fPut the JAR in your server's &bplugins &ffolder, then restart the server."

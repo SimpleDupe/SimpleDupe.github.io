@@ -1,13 +1,25 @@
-# SimpleDupe configuration
+# ============================================================
+# SimpleDupe Configuration
+# ============================================================
+# Edit this file, then run /simpledupereload.
 
-# Maximum number of items a player can duplicate at once.
+# ------------------------------------------------------------
+# Duplication Limit
+# ------------------------------------------------------------
+# Maximum number of copies one /dupe command can create.
 max-dupe-amount: 5
 
-# Drop overflow items when a player's inventory is full.
+# ------------------------------------------------------------
+# Inventory Overflow
+# ------------------------------------------------------------
+# false: keep overflow from duplicating and show an inventory-full message.
+# true:  drop overflow items at the player's location.
 drop-overflow-items: false
 
-# Items matching any entry below cannot be duplicated.
-# Names and lore support legacy colors, hex codes, and MiniMessage formatting.
+# ------------------------------------------------------------
+# Item Blacklist
+# ------------------------------------------------------------
+# Add any type of block you want to protect. Add one item per line.
 blacklist:
   materials:
     - BEDROCK
@@ -15,7 +27,19 @@ blacklist:
     - COMMAND_BLOCK
     - STRUCTURE_BLOCK
     - JIGSAW
-  names: []
-  # Use an enchantment key, or KEY:LEVEL to block that level and higher.
-  enchantments: []
-  lore: []
+
+  # Exact custom item names. Remove the # to enable an example.
+  # Names support legacy colors (&a), hex colors (&#42e8e0), and MiniMessage.
+  names:
+      - "&cAdmin Sword"
+
+  # Enchantment names, or ENCHANTMENT:LEVEL to block that level and above.
+  enchantments:
+      - "sharpness:5"
+      - "unbreaking:3"
+      - "mending:1"
+
+  # Exact lore lines. Remove the # to enable an example.
+  lore:
+      - "&7Event Reward"
+      - "&#42e8e0Limited Edition"

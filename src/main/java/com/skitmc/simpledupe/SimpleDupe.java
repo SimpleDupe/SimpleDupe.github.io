@@ -186,7 +186,7 @@ public final class SimpleDupe extends JavaPlugin implements CommandExecutor, Lis
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if (command.getName().equalsIgnoreCase("simpledupeguide")) {
-            if (!sender.isOp()) {
+            if (!sender.hasPermission("simpledupe.guide")) {
                 sender.sendMessage(configManager.getMessage("no-permission"));
                 return true;
             }
